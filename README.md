@@ -1,1 +1,1 @@
-# fast cross-validation in harmonic approximation
+# Fast Cross-Validation in Harmonic Approximation
