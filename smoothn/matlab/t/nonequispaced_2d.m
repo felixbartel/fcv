@@ -62,8 +62,9 @@ nfft_precompute_psi(plan);
 
 options = optimset('OutputFcn',@outfun,'Display','iter','MaxFunEvals',MaxFunEvals);
 subplot(122);
-lambda_min = fminunc(@(lambda) V(plan, W, W_hat, f_e, lambda), ...
-  lambda_0, options);
+lambda_min = fminunc(@(lambda) log(V(plan, W, W_hat, f_e, exp(lambda))), ...
+  log(lambda_0), options);
+lambda_min = exp(lambda_min);
 hold off;
 
 
@@ -97,7 +98,7 @@ c = caxis;
 
 function stop = outfun(x, optimValues, ~)
   stop = false;
-  loglog(x,optimValues.fval,'k.');
+  loglog(exp(x),exp(optimValues.fval),'k.');
   xlabel('\lambda');
   ylabel('cv score');
   axis square;
