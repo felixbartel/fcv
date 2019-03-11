@@ -7,6 +7,8 @@ using NFFT
 using IterativeSolvers
 using LinearMaps
 using LinearAlgebra
+using PyCall
+scipy = pyimport("scipy.spatial")
 
 ## helper functions
 
@@ -53,12 +55,9 @@ function smoothn(nodes, f_e, N_iter = 20)
   s         = 3;                        # weights in frequency domain
   W_hat     = [ 1+abs(n).^s for n in -N/2:N/2-1 ];
 
-## calculate Voronoi area (weights in space domain)
-  W = zeros(size(nodes));
-  W[1] = nodes[2]-nodes[end]+1;
-  W[2:end-1] = nodes[3:end]-nodes[1:end-2];
-  W[end] = nodes[1]+1-nodes[end-1];
-  W = W/2;
+
+
+
 
 ## main computations
   plan = Plan((N, ), M);
@@ -96,19 +95,70 @@ function smoothn(nodes, f_e, N_iter = 20)
 end
 
 
-using Plots
-
-nodes = rand(Float64, 1000);
-nodes = sort(nodes);
-f = [ sin(pi*4*x)/2+0.2*sin(pi*32*x)+0.5+0.05*randn() for x in nodes ];
-f_hat_r = smoothn(nodes, f);
-
-M_plot = floor(Int, 1e4);
-nodes_plot = collect((0:M_plot-1)/M_plot);
-plan = Plan((length(f_hat_r), ), M_plot);
-plan.x = nodes_plot;
-f_r = F(plan, f_hat_r);
 
 
-scatter(nodes, real(f), markersize = 1, markercolor = :black)
-plot!(nodes_plot, real(f_r), linewidth = 2, color = :blue)
+using Plots; pyplot()
+
+M = 5;
+d = 2;
+nodes = rand(Float64, M, d);
+
+shift = -ones(1,d)
+nodes_p = copy(nodes);
+println(nodes_p)
+
+while shift[1] != 2
+  println(nodes_p)
+  if shift != zeros(d)
+    println(shift)
+    println(size(nodes_p))
+    println([nodes_p; nodes+repeat(shift, M)]);
+#    nodes_p = [nodes_p; nodes+repeat(shift, M)];
+  end
+
+  shift[end] += 1;
+  for idx = d:-1:2
+    if shift[idx] == 2
+      shift[idx] = -1;
+      shift[idx-1] += 1;
+    end
+  end
+end
+
+
+
+
+### calculate Voronoi area (weights in space domain)
+#W = zeros(size(nodes, 1));
+#if d == 1
+#  nodes = sort(nodes);
+#  W[1] = nodes[2]-nodes[end]+1;
+#  W[2:end-1] = nodes[3:end]-nodes[1:end-2];
+#  W[end] = nodes[1]+1-nodes[end-1];
+#  W = W/2;
+#else
+#  v = scipy.Voronoi(nodes);
+#  for idx = 1:M
+#    indices = 1 .+v.regions[idx]
+#    if ( 0 in indices ) || ( isempty(indices) )
+#      W[idx] = 0.01;
+#    else
+#      W[idx] = scipy.ConvexHull(v.vertices[indices,:]).volume;
+#    end
+#  end
+#end
+#
+#scatter(nodes[:,1], nodes[:,2], zcolor = W);
+#
+#f = [ sin(pi*4*x)/2+0.2*sin(pi*32*x)+0.5+0.05*randn() for x in nodes ];
+#f_hat_r = smoothn(nodes, f);
+#
+#M_plot = floor(Int, 1e4);
+#nodes_plot = collect((0:M_plot-1)/M_plot);
+#plan = Plan((length(f_hat_r), ), M_plot);
+#plan.x = nodes_plot;
+#f_r = F(plan, f_hat_r);
+#
+#
+#scatter(nodes, real(f), markersize = 1, markercolor = :black)
+#plot!(nodes_plot, real(f_r), linewidth = 2, color = :blue)
