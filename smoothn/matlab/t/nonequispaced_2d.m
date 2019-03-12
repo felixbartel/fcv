@@ -22,7 +22,7 @@ W_hat = (1+(-N/2:N/2-1)'.^2+(-N/2:N/2-1).^2).^(s/2);
 W_hat = W_hat(:);
 
 lambda_0  = 1;
-MaxFunEvals = 50;
+MaxFunEvals = 20;
 
 
 %% calculate Voronoi area
@@ -49,7 +49,7 @@ scatter(nodes(:,1),-nodes(:,2),10,f_e,'filled');
 title('noisy data');
 axis square;
 colorbar;
-caxis(c);
+caxis([0 1]);
 
 colormap jet
 
@@ -91,7 +91,7 @@ imagesc(real(reshape(plotf_r,res,res)));
 title('reconstruction');
 axis square;
 colorbar;
-c = caxis;
+caxis([0 1]);
 
 
 %% helper functions
