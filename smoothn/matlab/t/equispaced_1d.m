@@ -83,6 +83,7 @@ function [val,grad] = cvfun(f,t,W,W_hat)
     h2.*(f_1-f).^2./(1-h).^3+...
     f_2.*(f_1-f)./(1-h).^2);
   grad = real(grad)/val*exp(t);
+  val = log(val);
 end
 
 % variant not in log scale 
@@ -111,24 +112,3 @@ end
 function f = F(f_hat)
   f = fft(f_hat);
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
