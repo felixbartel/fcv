@@ -11,12 +11,10 @@ M      = 2^10;                       % number of nodes
 nodes  = (0:M-1)'/M;                 % nodes in space domain
 f      = fun(nodes);                 % function values
 f = f-min(f); f = f/max(f);          % normalize function
-f_hat = ifft(f);                     % get original f_hat
+fhat   = ifft(f);                      % get original f_hat
 
 f_e    = f+0.1*randn(size(f));       % noisy function values
-W      = 1/M;                        % weights in space domain
 s      = 3;                          % weights in frequency domain
-W_hat  = ([0:M/2-1 M/2:-1:1])'.^s+1;
 
 lambda = 2.^(linspace(-20,-5,25));   % possible lambda
 err    = 0*lambda;                   % stores L_2-error
@@ -25,13 +23,11 @@ cv     = 0*lambda;                   % stores cv score
 
 %% main computations
 
+fcv = FCV_equispaced(1,f_e,s);
+
 for idx = 1:length(lambda) % loop over lambda
-  f_hat_r = compute_f_hat(f_e,lambda(idx),W,W_hat);
-  err(idx) = norm(f_hat-f_hat_r);
-  f_r = F(f_hat_r);
-  
-  h = W*sum(1./(1+lambda(idx)*W_hat));
-  cv(idx) = norm((f_r-f_e)./(1-h))^2;
+  [cv(idx),f_hat_r] = fcv.compute(lambda(idx));
+  err(idx) = norm(fhat-f_hat_r);
 end
 
 
@@ -41,7 +37,7 @@ end
 [~,idx_cv]  = min(cv);
 
 % calculate reconstruction
-f_r = F(compute_f_hat(f_e,lambda(idx_cv),W,W_hat));
+[~,~,f_r] = fcv.compute(lambda(idx_cv));
 
 
 %% plotting
@@ -69,13 +65,5 @@ ylabel('cv score');
 axis square;
 
 
-%% helper functions
 
-function f_hat = compute_f_hat(f,lambda,W,W_hat)
-  f_hat = W*length(f)*ifft(f);
-  f_hat = f_hat./(1+lambda*W_hat);
-end
 
-function f = F(f_hat)
-  f = fft(f_hat);
-end

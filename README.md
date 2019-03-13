@@ -3,8 +3,8 @@
 ## Overview
 
 The `fct` package is a fast implementation for evaluating the ordinary cross-validation score and the generalized cross-validation score.
- * In the `plots` folder you can find the scripts for creating the figures from the paper below
- * In the `smoothn` folder you can find functions which combine the fast evaluation with the simple bisection method for automated soothing.
+ * In the `matlab/examples` folder you can find the scripts for creating the figures from the paper below
+ * In the `matlab/smoothn` folder you can find functions which combine the fast evaluation with the simple bisection method for automated soothing.
 
 ## Requirements
 

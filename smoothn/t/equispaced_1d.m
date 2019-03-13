@@ -18,6 +18,7 @@ W      = 1/M;                        % weights in space domain
 s      = 3;                          % weights in frequency domain
 W_hat  = ([0:M/2-1 M/2:-1:1])'.^s+1;
 
+
 lambda_0 = 1;
 MaxFunEvals = 10;
 
