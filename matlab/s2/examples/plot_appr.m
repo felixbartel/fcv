@@ -28,41 +28,22 @@ gcv       = 0*lambda;                     % stores gcv score
 ocv_appr  = 0*lambda;                     % stores approximated ocv score
 gcv_appr  = 0*lambda;                     % stores approximated gcv score
 
-t_exact   = 0;
-t_appr    = 0;
+
+%% original fhat
+
+sF = S2FunHarmonic.quadrature(@(v) fun(v));
+fhat = sF.fhat(1:(N+1)^2);
 
 
 %% main computations
 
-nfsftmex('precompute',N,1000,1,0);
-plan = nfsftmex('init_advanced',N,M,1);
-nfsftmex('set_x',plan,[nodes.rho';nodes.theta']);
-nfsftmex('precompute_x',plan);
-
-f_hat = compute_f_hat(plan,f,0,W,W_hat);
+fcv = FCV_quad([nodes.rho,nodes.theta],f_e,W,N,s);
 
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-    
-% error
-  tic;
-  f_tilde = compute_f_hat(plan,f_e,lambda(idx),W,W_hat);
-  nfsftmex('set_f_hat_linear',plan,f_tilde);
-  nfsftmex('trafo',plan);
-  f_r = nfsftmex('get_f',plan);
-  f_r = real(f_r);
-  t_tmp = toc;
-  
-  err(idx) = norm(f_hat-f_tilde);
-  
-% approximate cv
-  tic;
-  h_tilde = sum((2*(0:N)'+1)./(1+lambda(idx)*W_hat((1:N+1).^2)))/(4*pi)*W;
-  ocv_appr(idx) = norm((f_r-f_e)./(1-h_tilde))^2;
-  gcv_appr(idx) = norm((f_r-f_e)./(1-mean(h_tilde)))^2;
-  t_appr = t_appr+t_tmp+toc;
-  
+  [ocv_appr(idx),gcv_appr(idx),fhat_r] = fcv.compute(lambda(idx));
+  err(idx) = norm(fhat-fhat_r);
 % % exact cv
 %   tic;
 %   h = zeros(M,1);
@@ -77,7 +58,6 @@ for idx = 1:length(lambda) % loop over lambda
 end
 close(wb);
 
-
 %% computations for plotting
 
 [~,idx_err]       = min(err);
@@ -86,11 +66,8 @@ close(wb);
 [~,idx_gcv_appr]  = min(gcv_appr);
 [~,idx_ocv_appr]  = min(ocv_appr);
 
-sF_r = S2FunHarmonic(compute_f_hat(plan,f_e,lambda(idx_ocv_appr),W,W_hat));
-nfsftmex('finalize',plan);
-
-t_exact = t_exact/length(lambda);
-t_appr  = t_appr/length(lambda);
+[~,~,fhat_r] = fcv.compute(lambda(idx_ocv_appr));
+sF_r = S2FunHarmonic(fhat_r);
 
 
 %% plotting
@@ -124,50 +101,3 @@ pcolor(sF_r,'contours',20,'upper');
 setColorRange([-0.5 0.5]);
 mtexTitle('reconstruction');
 mtexColorbar;
-
-
-%% print times
-
-fprintf('average time per lambda\n');
-fprintf('\tt_exact = %f\n',t_exact);
-fprintf('\tt_appr  = %f\n',t_appr);
-
-
-%% helper functions
-
-function f = F(plan,f_hat)
-  nfsftmex('set_f_hat_linear',plan,f_hat);
-  nfsftmex('trafo',plan);
-  f = nfsftmex('get_f',plan);
-  
-  f = real(f);
-end
-
-
-function f_hat = compute_f_hat(plan,f,lambda,W,W_hat)
-  f = sqrt(W).*f;
-  f = [f;zeros(length(W_hat),1)];
-  [f_hat,~] = lsqr(...
-    @(x,transp_flag) afun(plan,x,lambda,W,W_hat,transp_flag),...
-    f);
-end
-
-function y = afun(plan,x,lambda,W,W_hat,transp_flag)
-  if strcmp(transp_flag,'notransp')
-    nfsftmex('set_f_hat_linear',plan,x);
-    nfsftmex('trafo',plan);
-    y = nfsftmex('get_f',plan);
-    
-    y = sqrt(W).*y;
-    
-    y = [y; sqrt(lambda*W_hat).*x];
-  else
-    y = sqrt(W).*x(1:length(W));
-    
-    nfsftmex('set_f',plan,y);
-    nfsftmex('adjoint',plan);
-    y = nfsftmex('get_f_hat_linear',plan);
-    
-    y = y+sqrt(lambda*W_hat).*x(length(W)+1:end);
-  end
-end
