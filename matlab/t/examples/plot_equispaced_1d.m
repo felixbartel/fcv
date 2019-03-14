@@ -11,7 +11,7 @@ M      = 2^10;                       % number of nodes
 nodes  = (0:M-1)'/M;                 % nodes in space domain
 f      = fun(nodes);                 % function values
 f = f-min(f); f = f/max(f);          % normalize function
-fhat   = ifft(f);                      % get original f_hat
+fhat   = ifft(f);                    % get original fhat
 
 f_e    = f+0.1*randn(size(f));       % noisy function values
 s      = 3;                          % weights in frequency domain

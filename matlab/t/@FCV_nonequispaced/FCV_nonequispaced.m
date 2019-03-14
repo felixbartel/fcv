@@ -1,4 +1,4 @@
-classdef FCV_nonequispaced
+classdef FCV_nonequispaced < FCV
 % FCV_NONEQUISPACED is a class for fast cross-validation for equispaced nodes
 % on the torus
 %
@@ -9,6 +9,7 @@ classdef FCV_nonequispaced
 % Input:
 %   nodes - nodes in space domain
 %   f     - function values
+%   W     - weights in space domain (if empty, VoronoiArea is used)
 %   N     - bandwidth
 %   s     - decay of Fourier coefficients
 %   What  - weights in Fourier domain
@@ -36,7 +37,7 @@ methods
     else
       self.W = W;
     end
-    if length(N) == 1 % only bandwidth and decay is given
+    if length(N) == 1 % only bandwidth and decay are given
       self.What = zeros(N*ones(1,self.d));
       t = [-N/2:N/2-1];
       if self.d == 1

@@ -1,4 +1,4 @@
-classdef FCV_r1l
+classdef FCV_r1l < FCV
 % FCV_r1L is a class for fast cross-validation for rank-1 lattices
 % on the torus
 %

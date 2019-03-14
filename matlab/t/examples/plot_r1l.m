@@ -2,7 +2,7 @@
 
 rng('default');                               % reset random generator
 fun   = @(nodes) prod(bspline_o2(nodes),2);   % example function
-d     = 5;                                    % set dimension        
+d     = 6;                                    % set dimension        
 I     = coord_symhc(16,d);                    % choose Index set
 z     = [1 33 579 3628 21944 169230 1105193 ...
   77998320 49768670 320144128 2040484044];    % from Tonis paper

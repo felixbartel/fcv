@@ -1,4 +1,4 @@
-classdef FCV_equispaced
+classdef FCV_equispaced < FCV
 % FCV_EQUISPACED is a class for fast cross-validation for equispaced nodes
 % on the torus
 %
@@ -31,18 +31,22 @@ methods
     self.W = 1/length(f);
     if length(What) == 1 % only decay is given
       s = What;
-      self.What = zeros(self.N*ones(1,d));
-      t = [0:self.N/2-1 self.N/2:-1:1];
       if d == 1
-        self.What = t.^2;
+        self.What = (1+[0:self.N/2-1 self.N/2:-1:1].^s).';
       else
-        for j = 1:d
-          t = reshape(t,(self.N-1)*((1:d) == j)+ones(1,d));
-          self.What = self.What+t.^2;
+        self.What = zeros(self.N*ones(1,d));
+        t = [0:self.N/2-1 self.N/2:-1:1];
+        if d == 1
+          self.What = t.^2;
+        else
+          for j = 1:d
+            t = reshape(t,(self.N-1)*((1:d) == j)+ones(1,d));
+            self.What = self.What+t.^2;
+          end
         end
+        self.What = 1+self.What.^(s/2);
+        self.What = self.What(:);
       end
-      self.What = 1+self.What.^(s/2);
-      self.What = self.What(:);
     else % all What are given
       self.What = What;
     end

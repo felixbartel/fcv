@@ -3,7 +3,7 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 %
 % Syntax:
 %   ocv = fcv.COMPUTE(lambda)
-%   [ocv,gcv,f_hat_r,f_r] = fcv.COMPUTE(lambda)
+%   [ocv,gcv,fhat_r,f_r] = fcv.COMPUTE(lambda)
 %
 % Input:
 %   lambda - regularization parameter 
@@ -11,7 +11,7 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 % Output:
 %   ocv     - ordinary cross-validation score
 %   gcv     - generalized cross-validation score
-%   f_hat_r - corresponding Fourier coefficients
+%   fhat_r  - corresponding Fourier coefficients
 %   f_r     - corresponding function values
 
   [fhat_r,~] = lsqr(...

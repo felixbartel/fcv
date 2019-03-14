@@ -3,14 +3,14 @@ function [cv,fhat_r,f_r] = compute(self,lambda)
 %
 % Syntax:
 %   cv = fcv.COMPUTE(lambda)
-%   [cv,f_hat_r,f_r] = fcv.COMPUTE(lambda)
+%   [cv,fhat_r,f_r] = fcv.COMPUTE(lambda)
 %
 % Input:
 %   lambda - regularization parameter 
 %
 % Output:
 %   cv      - cross-validation score
-%   f_hat_r - corresponding Fourier coefficients
+%   fhat_r - corresponding Fourier coefficients
 %   f_r     - corresponding function values
 
   fhat_r = self.W*fftd_adj(self.f,self.d);
