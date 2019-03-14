@@ -2,21 +2,20 @@
 
 rng('default');                               % reset random generator
 fun   = @(nodes) prod(bspline_o2(nodes),2);   % example function
-d     = 6;                                    % set dimension        
+d     = 5;                                    % set dimension        
 I     = coord_symhc(16,d);                    % choose Index set
 z     = [1 33 579 3628 21944 169230 1105193 ...
-  77998320 49768670 320144128 2040484044].';  % from Tonis paper
+  77998320 49768670 320144128 2040484044];    % from Tonis paper
 M     = z(d+1);
 z     = z(1:d);
 x     = zeros(M,d);                           % nodes in space domain
 for idx = 1:d
   x(:,idx) = mod(z(idx)*(0:M-1).'/M,1);
 end
-f     = fun(x);                             % function values
+f     = fun(x);                               % function values
 f_hat = bspline_o2_hat(I);                    % original f_hat
 
 f_e   = f+(max(f)-min(f))*0.05*randn(size(f));% noisy function values
-W     = 1/M;                                  % weights in space domain
 W_hat = max(prod(I,2).^2,1);                  % weights in frequency domain
 
 lambda= 2.^(linspace(-9,0,25));               % possible lambda
@@ -26,14 +25,13 @@ cv    = 0*lambda;                             % stores LOOCV score
 
 %% main computations
 
+fcv = FCV_r1l(z,M,f_e,I,W_hat);
+
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  f_hat_r = compute_f_hat(f_e,I,z,M,lambda(idx),W,W_hat);
+  [cv(idx),f_hat_r] = fcv.compute(lambda(idx));
   err(idx) = norm(f_hat-f_hat_r);
-  f_r = lfft(I,z,M,f_hat_r.');
-  h = sum(1./(1+lambda(idx)*W_hat))*W;
-  cv(idx) = norm((f_r-f_e)./(1-h))^2;
 end
 close(wb)
 
@@ -41,7 +39,7 @@ close(wb)
 
 [~,idx_err] = min(err);
 [~,idx_cv]  = min(cv);
-f_r = F(I,z,M,compute_f_hat(f_e,I,z,M,lambda(idx_cv),W,W_hat));
+[~,~,f_r] = fcv.compute(lambda(idx_cv));
 
 
 %% plotting
@@ -61,29 +59,6 @@ axis square;
 
 
 %% helper functions
-
-function y = F(I,z,M,f_hat)
-  y = lfft(I,z,M,f_hat.');
-end
-
-function f_hat = compute_f_hat(f,I,z,M,lambda,W,W_hat)
-  f_hat = alfft(I,z,M,W*f);
-  f_hat = f_hat./(1+lambda*W_hat);
-end
-
-function f = lfft(I,z,M,f_hat)
-  k = mod(I*z,M)+1;
-  k = floor(k);
-  fhat1 = accumarray(k,f_hat,[M,1],@sum);
-  f = M*ifft(fhat1);
-end
-
-function f_hat = alfft(I,z,M,f)
-  k = mod(I*z,M)+1;
-  k = floor(k);
-  ghat = fft(f);
-  f_hat = ghat(k);
-end
 
 
 function val = bspline_o2( x )
