@@ -37,18 +37,7 @@ for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
   [ocv_appr(idx),gcv_appr(idx),~,f_r] = fcv.compute(lambda(idx));
   err(idx) = norm(f-f_r);
-  
-% % exact cv score
-%   tic;
-%   h = zeros(M,1);
-%   for l = 1:M
-%     tmp = double( 1:M == l )';
-%     tmp = mult_H(plan,tmp,lambda(idx),W,W_hat);
-%     h(l) = tmp(l);
-%   end
-%   ocv(idx) = norm((f_r-f_e)./(1-h))^2;
-%   gcv(idx) = norm((f_r-f_e)./(1-mean(h)))^2;
-%   t_exact = t_exact+t_tmp+toc;
+%  [ocv(idx),gcv(idx),~,f_r] = fcv.compute_exact(lambda(idx));
 end
 close(wb);
 
