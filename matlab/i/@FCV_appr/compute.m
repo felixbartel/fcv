@@ -1,5 +1,5 @@
 function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
-% fcv.COMPUTE computes the approximated cross-validation score
+% fcv.COMPUTE computes the cross-validation score
 %
 % Syntax:
 %   ocv = fcv.COMPUTE(lambda)
@@ -16,40 +16,35 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 
   [fhat_r,~] = lsqr(...
     @(x,transp_flag) A(self.plan,x,lambda,self.W,self.What,transp_flag),...
-    [sqrt(self.W).*self.f;zeros(length(self.What),1)]);
-    
-  nfft_set_f_hat(self.plan,fhat_r);
-  nfft_trafo(self.plan);
-  f_r = nfft_get_f(self.plan);
+    [sqrt(self.M/2*self.W).*self.f;zeros(self.M,1)],1e-8,1000);
   
-% approximated cv score
-  h = sum(1./(1+lambda*self.What))*self.W;
+  f_r = ndctIII(self.plan,fhat_r); 
+  
+% compute diagonal emelents
+  a = 1./(1+lambda*self.What);
+  a(1) = a(1)/2;
+
+  a_hat_r = zeros(2*self.M,1);
+  a_hat_r(1:2:2*self.M-1) = a;
+
+  nfct_set_f_hat(self.plan2,double(a_hat_r));
+  nfct_trafo(self.plan2);
+  h = nfct_get_f(self.plan2);
+
+  h = self.W.*(h+sum(a))/2;
+
   ocv = real(sum(((f_r-self.f)./(1-h)).^2));
   gcv = real(sum(((f_r-self.f)./(1-mean(h))).^2));
 end
 
 
 function y = A(plan,x,lambda,W,What,transp_flag)
+  M = length(W);
   if strcmp(transp_flag,'notransp')
-    nfft_set_f_hat(plan,x);
-    nfft_trafo(plan);
-    y = nfft_get_f(plan);
-    
-    y = sqrt(W).*y;
-    
+    y = sqrt(M/2*W).*ndctIII(plan,x);
     y = [y; sqrt(lambda*What).*x];
   else
-    y = sqrt(W).*x(1:length(W));
-    
-    nfft_set_f(plan,y);
-    nfft_adjoint(plan);
-    y = nfft_get_f_hat(plan);
-    
-    y = y+sqrt(lambda*What).*x(length(W)+1:end);
+    y = ndctII(plan,sqrt(M/2*W).*x(1:M));
+    y = y+sqrt(lambda*What).*x(M+1:end);
   end
 end
-
-
-
-
-

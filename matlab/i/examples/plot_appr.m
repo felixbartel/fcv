@@ -30,7 +30,7 @@ gcv_appr  = 0*lambda;                       % stores approximated gcv score
 
 %% main computations
 
-fcv = FCV_nonequispaced(nodes,f_e,[],M,s);
+fcv = FCV_appr(nodes,f_e,[],M,s);
 
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda

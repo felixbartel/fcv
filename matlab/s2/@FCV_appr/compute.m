@@ -15,7 +15,7 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 %   f_r     - corresponding function values
 
   [fhat_r,~] = lsqr(...
-    @(x,transp_flag) afun(self.plan,x,lambda,self.W,self.What,transp_flag),...
+    @(x,transp_flag) A(self.plan,x,lambda,self.W,self.What,transp_flag),...
     [sqrt(self.W).*self.f;zeros(length(self.What),1)]);
   
   nfsftmex('set_f_hat_linear',self.plan,fhat_r);
@@ -28,7 +28,7 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 end
 
 
-function y = afun(plan,x,lambda,W,W_hat,transp_flag)
+function y = A(plan,x,lambda,W,W_hat,transp_flag)
   if strcmp(transp_flag,'notransp')
     nfsftmex('set_f_hat_linear',plan,x);
     nfsftmex('trafo',plan);

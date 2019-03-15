@@ -1,4 +1,4 @@
-classdef FCV_appr
+classdef FCV_appr < FCV
 % FCV_APPR is a class for fast cross-validation without given quadrature rule
 % on the two-dimensional sphere
 %

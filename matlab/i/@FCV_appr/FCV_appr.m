@@ -1,10 +1,10 @@
-classdef FCV_nonequispaced < FCV
-% FCV_NONEQUISPACED is a class for fast cross-validation for nonequispaced
+classdef FCV_appr < FCV
+% FCV_APPR is a class for fast cross-validation for nonequispaced
 % nodes on the unit interval
 %
 % Syntax:
-%   fcv = FCV_nonequispaced(nodes,f,W,N,s)
-%   fcv = FCV_nonequispaced(nodes,f,W,What)
+%   fcv = FCV_APPR(nodes,f,W,N,s)
+%   fcv = FCV_APPR(nodes,f,W,What)
 %
 % Input:
 %   nodes - nodes in space domain
@@ -29,7 +29,7 @@ properties(Dependent = true)
 end
 
 methods
-  function self = FCV_nonequispaced(nodes,f,W,N,s)
+  function self = FCV_appr(nodes,f,W,N,s)
     self.nodes = nodes;
     self.f = f;
     if isempty(W)

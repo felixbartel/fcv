@@ -1,4 +1,4 @@
-%%
+%
 % this script calculates and plots the cv score for an nonequispaced
 % example on the one-dimensional torus
 %
@@ -36,7 +36,7 @@ fhat = fhat([(end-N/2+1):end 1:N/2]);
 
 %% main computations
 
-fcv = FCV_nonequispaced(nodes,f_e,[],N,s);
+fcv = FCV_appr(nodes,f_e,[],N,s);
 
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda

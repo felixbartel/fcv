@@ -1,3 +1,7 @@
+%
+% this script calculates and plots the cv score for a rank-1 lattice
+% on the d-dimensional torus
+%
 %% initialization
 
 rng('default');                               % reset random generator

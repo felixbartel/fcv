@@ -1,4 +1,4 @@
-classdef FCV_quad
+classdef FCV_quad < FCV
 % FCV_QUAD is a class for fast cross-validation for given quadrature rule
 % on the two-dimensional sphere
 %

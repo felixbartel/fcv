@@ -39,7 +39,7 @@ fhat = fhat(:);
 
 %% main computations
 
-fcv = FCV_nonequispaced(nodes,f_e,[],N,s);
+fcv = FCV_appr(nodes,f_e,[],N,s);
 
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
