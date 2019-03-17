@@ -22,10 +22,10 @@ s         = 3;
 
 lambda    = 2.^linspace(-17,-11,25);        % possible lambda
 err       = 0*lambda;                       % stores l_2-error
-ocv       = 0*lambda;                       % stores ocv score
-gcv       = 0*lambda;                       % stores gcv score
-ocv_appr  = 0*lambda;                       % stores approximated ocv score
-gcv_appr  = 0*lambda;                       % stores approximated gcv score
+ocv_exact = 0*lambda;                       % stores ocv score
+gcv_exact = 0*lambda;                       % stores gcv score
+ocv       = 0*lambda;                       % stores approximated ocv score
+gcv       = 0*lambda;                       % stores approximated gcv score
 
 
 %% main computations
@@ -35,21 +35,21 @@ fcv = FCV_appr(nodes,f_e,[],M,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [ocv_appr(idx),gcv_appr(idx),~,f_r] = fcv.compute(lambda(idx));
+  [ocv(idx),gcv(idx),~,f_r] = fcv.compute(lambda(idx));
   err(idx) = norm(f-f_r);
-%  [ocv(idx),gcv(idx),~,f_r] = fcv.compute_exact(lambda(idx));
+%  [ocv_exact(idx),gcv_exact(idx),~,f_r] = fcv.compute_exact(lambda(idx));
 end
 close(wb);
 
 
 %% computations for plotting
 
+[~,idx_gcv_exact] = min(gcv_exact);
+[~,idx_ocv_exact] = min(ocv_exact);
 [~,idx_gcv] = min(gcv);
 [~,idx_ocv] = min(ocv);
-[~,idx_gcv_appr] = min(gcv_appr);
-[~,idx_ocv_appr] = min(ocv_appr);
 
-[~,~,f_hat_r] = fcv.compute(lambda(idx_ocv_appr));
+[~,~,f_hat_r] = fcv.compute(lambda(idx_ocv));
 
 % calculate values for plotting
 res = 480;
@@ -82,10 +82,10 @@ xlabel('\lambda');
 ylabel('l_2-error');
 % plot cv score
 yyaxis right;
-p = loglog(lambda,[ocv;gcv;ocv_appr;gcv_appr]); hold on;
-scatter(lambda([idx_ocv idx_gcv idx_ocv_appr idx_gcv_appr]),...
-  [ocv(idx_ocv) gcv(idx_gcv) ocv_appr(idx_ocv_appr) gcv_appr(idx_gcv_appr)],40,'filled'); hold off;
-ylim([min([ocv gcv gcv_appr]) max([ocv gcv gcv_appr])]); hold off;
+p = loglog(lambda,[ocv_exact;gcv_exact;ocv;gcv]); hold on;
+scatter(lambda([idx_ocv_exact idx_gcv_exact idx_ocv idx_gcv]),...
+  [ocv_exact(idx_ocv_exact) gcv_exact(idx_gcv_exact) ocv(idx_ocv) gcv(idx_gcv)],40,'filled'); hold off;
+ylim([min([ocv_exact gcv_exact gcv]) max([ocv_exact gcv_exact gcv])]); hold off;
 legend(p,'ocv','gcv','appr ocv','appr gcv');
 ylabel('cv score');
 axis square;
