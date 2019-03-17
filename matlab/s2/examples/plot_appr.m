@@ -37,24 +37,14 @@ fhat = sF.fhat(1:(N+1)^2);
 
 %% main computations
 
-fcv = FCV_quad([nodes.rho,nodes.theta],f_e,W,N,s);
+fcv = FCV_appr([nodes.rho,nodes.theta],f_e,W,N,s);
 
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
   [ocv_appr(idx),gcv_appr(idx),fhat_r] = fcv.compute(lambda(idx));
   err(idx) = norm(fhat-fhat_r);
-% % exact cv
-%   tic;
-%   h = zeros(M,1);
-%   for l = 1:M
-%     tmp = double( 1:M == l )';
-%     tmp = F(plan,compute_f_hat(plan,tmp,lambda(idx),W,W_hat));
-%     h(l) = tmp(l);
-%   end
-%   ocv(idx) = norm((f_r-f_e)./(1-h))^2;
-%   gcv(idx) = norm((f_r-f_e)./(1-mean(h)))^2;
-%   t_exact = t_exact+t_tmp+toc;
+%  [ocv(idx),gcv(idx),~] = fcv.compute_exact(lambda(idx));
 end
 close(wb);
 

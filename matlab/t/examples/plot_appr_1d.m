@@ -6,7 +6,7 @@
 
 rng('default');                       % reset random generator
 fun       = @(x) peaks(6*x-3,0);      % example function 
-N         = 64;                       % bandwidth
+N         = 2^6;                      % bandwidth
 nodes     = rand(2*N,1);              % nodes in space domain
 nodes     = nodes.^2;
 nodes     = unique(nodes,'rows');

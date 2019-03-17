@@ -7,7 +7,7 @@
 rng('default');                      % reset random generator
 
 fun    = @(x) peaks(6*x-3,0);        % example function
-M      = 2^15;                       % number of nodes
+M      = 2^10;                       % number of nodes
 nodes  = (0:M-1)'/M;                 % nodes in space domain
 f      = fun(nodes);                 % function values
 f = f-min(f); f = f/max(f);          % normalize function

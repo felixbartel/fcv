@@ -28,7 +28,7 @@ properties(Dependent = true)
 end
 
 methods
-  function self = FCV_quad(nodes,f,W,N,s)
+  function self = FCV_appr(nodes,f,W,N,s)
     self.nodes = nodes;
     self.f = f;
     self.W = W;

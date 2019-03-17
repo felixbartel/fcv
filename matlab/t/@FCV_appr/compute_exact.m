@@ -22,7 +22,6 @@ function [ocv,gcv,fhat_r,f_r] = compute_exact(self,lambda)
   nfft_trafo(self.plan);
   f_r = nfft_get_f(self.plan);
 
-% exact cv score
   h = zeros(self.M,1);
   for l = 1:self.M
     tmp = double( 1:self.M == l )';
