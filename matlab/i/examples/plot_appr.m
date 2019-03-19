@@ -20,12 +20,23 @@ f = f-min(f); f = f/max(f);                 % normalize function
 f_e       = f+0.05*randn(size(f));          % noisy function values
 s         = 3;
 
-lambda    = 2.^linspace(-17,-11,25);        % possible lambda
+lambda    = 2.^linspace(-16,-10,25);       % possible lambda
 err       = 0*lambda;                       % stores l_2-error
 ocv_exact = 0*lambda;                       % stores ocv score
 gcv_exact = 0*lambda;                       % stores gcv score
 ocv       = 0*lambda;                       % stores approximated ocv score
 gcv       = 0*lambda;                       % stores approximated gcv score
+
+
+%% compute exact fhat
+
+M2 = 2^10;
+nodes2 = cos(pi*(2*(1:M2)-1)/(2*M2)).';
+f2 = fun(nodes2);
+f2 = f2-min(f2); f2 = f2/max(f2);
+fcv = FCV_chebyshev(f2,0);
+[~,~,fhat] = fcv.compute(0);
+fhat = fhat(1:M);
 
 
 %% main computations
@@ -35,8 +46,8 @@ fcv = FCV_appr(nodes,f_e,[],M,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [ocv(idx),gcv(idx),~,f_r] = fcv.compute(lambda(idx));
-  err(idx) = norm(f-f_r);
+  [ocv(idx),gcv(idx),fhat_r] = fcv.compute(lambda(idx));
+  err(idx) = norm([pi;pi/2*ones(M-1,1)].*(fhat-fhat_r));
 %  [ocv_exact(idx),gcv_exact(idx),~,f_r] = fcv.compute_exact(lambda(idx));
 end
 close(wb);
@@ -49,7 +60,7 @@ close(wb);
 [~,idx_gcv] = min(gcv);
 [~,idx_ocv] = min(ocv);
 
-[~,~,f_hat_r] = fcv.compute(lambda(idx_ocv));
+[~,~,fhat_r] = fcv.compute(lambda(idx_ocv));
 
 % calculate values for plotting
 res = 480;
@@ -58,7 +69,7 @@ plotnodes = linspace(-1,1,res);
 plan = nfct_init_1d(M,length(plotnodes));
 nfct_set_x(plan,acos(plotnodes)/(2*pi));
 
-plotf_r = sqrt(M/2)*ndctIII(plan,f_hat_r);
+plotf_r = sqrt(M/2)*ndctIII(plan,fhat_r);
 nfct_finalize(plan);
 
 
