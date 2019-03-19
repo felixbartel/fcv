@@ -25,7 +25,7 @@ end
 methods
   function self = FCV_chebyshev(f,What)
     self.f = f;
-    self.W = 2/length(f);
+    self.W = pi/length(f);
     if length(What) == 1 % only decay is given
       self.What  = ((1:self.M).').^What;
     else % all What are given

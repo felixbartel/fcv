@@ -14,21 +14,29 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 %   fhat_r  - corresponding Fourier coefficients
 %   f_r     - corresponding function values
 
+
   fhat_r = dctII(self.W*self.f);
-  fhat_r = fhat_r./(1+lambda*self.What);
-  f_r = self.M/2*dctIII(fhat_r);
+  fhat_r(1) = sqrt(2)*fhat_r(1);
+  fhat_r = sqrt(self.N/2)*fhat_r;
+  
+  fhat_r = fhat_r./(pi*[1; 1/2*ones(self.N-1,1)]+lambda*self.What);
+  
+  fhat_r(1) = sqrt(2)*fhat_r(1);
+  f_r = sqrt(self.N/2)*dctIII(fhat_r);
 
 % compute diagonal emelents via dctI
-  a = 1./(1+lambda*self.What);
+  b = 1./(pi*[1; 1/2*ones(self.N-1,1)]+lambda*self.What);
 
-  atilde = zeros(2*self.M+1,1);
-  atilde(1:2:2*self.M-1) = a;
-  atilde(1) = atilde(1)/sqrt(2);
+  btilde = zeros(2*self.M+1,1);
+  btilde(1:2:2*self.M-1) = b;
+  btilde(1) = btilde(1)*2*sqrt(2);
 
-  h = sqrt(1/self.M)*dctI(atilde);
+  h = sqrt(self.N/2)*dctI(btilde);
   h = h(2:2:2*self.M);
-  h = h+(sum(a)-a(1)/2)/self.M;
-
+  h = h+(sum(b(2:end)));
+  
+  h = self.W/2*h;
+  
   ocv = norm((f_r-self.f)./(1-h))^2;
   gcv = norm((f_r-self.f)./(1-mean(h)))^2;
 end

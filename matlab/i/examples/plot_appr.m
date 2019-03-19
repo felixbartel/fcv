@@ -58,7 +58,7 @@ plotnodes = linspace(-1,1,res);
 plan = nfct_init_1d(M,length(plotnodes));
 nfct_set_x(plan,acos(plotnodes)/(2*pi));
 
-plotf_r = ndctIII(plan,f_hat_r);  
+plotf_r = sqrt(M/2)*ndctIII(plan,f_hat_r);
 nfct_finalize(plan);
 
 

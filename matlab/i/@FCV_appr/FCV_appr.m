@@ -39,7 +39,7 @@ methods
       self.W = pi-(nodes_tilde(1)+nodes_tilde(2))/2;                    % first node
       self.W = [self.W; (nodes_tilde(1:end-2)-nodes_tilde(3:end))/2];   % indermediate nodes
       self.W = [self.W; (nodes_tilde(end-1)+nodes_tilde(end))/2];       % last nodes
-      self.W(idx) = 2*self.W/pi;
+      self.W(idx) = self.W;
     else
       self.W = W;
     end
