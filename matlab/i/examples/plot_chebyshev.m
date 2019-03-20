@@ -12,7 +12,6 @@ f      = fun(nodes);                  % function values
 f = f-min(f); f = f/max(f);           % normalize function
 
 f_e    = f+0.05*randn(size(f));       % noisy function values
-W      = 2/M;                         % weights in space domain      
 s      = 3;
 
 lambda = 2.^(linspace(-18,-10,20));   % possible lambda

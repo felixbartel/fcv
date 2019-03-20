@@ -82,7 +82,6 @@ scatter(nodes,real(f_e(idx)),10,'filled','k'); hold on;
 % plot reconstruction
 plot(plotnodes,real(plotf_r)); hold off;
 axis square;
-hold off;
 title('noisy data and reconstruction');
 
 subplot(122);

@@ -18,8 +18,6 @@ f         = fun(nodes);                   % function values
 
 f_e       = f+0.05*randn(size(f));        % noisy function values
 s         = 3;                            % weights in requency domain
-W_hat     = (2*(0:N)+1).^(2*s);
-W_hat     = repelem(W_hat,1:2:(2*N+1))';
 
 
 %% plot noisy data

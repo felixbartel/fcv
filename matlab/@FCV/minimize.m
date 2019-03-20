@@ -7,7 +7,7 @@ function lambda_min = minimize(self)
 % Output:
 %   lambda_min - lambda minimizing the cross-validation score
 
-lambda0 = 1;
+lambda0 = 0.1;
 
 if ismethod(self,'compute_with_grad')
   MaxFunEvals = 7; % because seven is a lucky number

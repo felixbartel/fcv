@@ -25,9 +25,8 @@ title('noisy data');
 axis square;
 caxis([0 1]);
 colorbar;
-drawnow();
-
 colormap jet;
+drawnow();
 
 
 %% main computations
