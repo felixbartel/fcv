@@ -41,8 +41,8 @@ else % d > 1
   [V,C] = voronoin(nodes_p);
    
   W = zeros(M,1);
-  for idx = 1:M % todo: does not work for d > 2
-    W(idx) = polyarea(V(C{idx},1),V(C{idx},2));
+  for idx = 1:M % todo: does not work for d > 3
+    [~,W(idx)] = convhull(V(C{idx},:));
   end
 end
 end
