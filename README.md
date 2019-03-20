@@ -1,11 +1,5 @@
 # Fast Cross-validation in Harmonic Approximation
 
-## Todo
-
-[ ] update README
-[ ] automatic denoising examples for the unit interval
-[ ] proper install/uninstall scripts
-
 
 ## Overview
 
