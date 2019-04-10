@@ -39,7 +39,7 @@ methods
     end
     if length(N) == 1 % only bandwidth and decay are given
       self.What = zeros(N*ones(1,self.d));
-      t = [-N/2:N/2-1];
+      t = -N/2:N/2-1;
       if self.d == 1
         self.What = t.^2;
       else

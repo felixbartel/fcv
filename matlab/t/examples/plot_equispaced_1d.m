@@ -1,4 +1,4 @@
-%
+K%
 % this script calculates and plots the cv score for an equispaced example
 % on the one-dimensional torus
 %

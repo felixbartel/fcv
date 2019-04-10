@@ -16,7 +16,7 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 
   [fhat_r,~] = lsqr(...
     @(x,transp_flag) A(self.plan,x,lambda,self.W,self.What,transp_flag),...
-    [sqrt(self.W).*self.f;zeros(length(self.What),1)]);
+    [sqrt(self.W).*self.f;zeros(length(self.What),1)],1e-10);
   
   nfsftmex('set_f_hat_linear',self.plan,fhat_r);
   nfsftmex('trafo',self.plan);

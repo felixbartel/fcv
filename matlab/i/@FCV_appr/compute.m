@@ -16,7 +16,7 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
 
   [fhat_r,~] = lsqr(...
     @(x,transp_flag) A(self.plan,x,lambda,self.W,self.What,transp_flag),...
-    [sqrt(self.W).*self.f;zeros(self.M,1)],1e-8,1000);
+    [sqrt(self.W).*self.f;zeros(self.M,1)],1e-10,200);
    
   fhat_r(1) = sqrt(2)*fhat_r(1);
   f_r = sqrt(self.N/2)*ndctIII(self.plan,fhat_r);
