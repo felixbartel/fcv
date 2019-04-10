@@ -74,16 +74,16 @@ ylabel('cv score');
 axis square;
 
 figure(2);
-plot(odf,'sigma');
+plot(odf,'sigma','contours',50);
 mtexColorbar;
 mtexColorMap(jet);
 
 figure(3);
-plot(odf_r,'sigma');
+plot(odf_r,'sigma','contours',50);
 mtexColorbar;
 mtexColorMap(jet);
 
 figure(4);
-plot(odf_noisy,'sigma');
+plot(odf_noisy,'sigma','contours',50);
 mtexColorbar;
 mtexColorMap(jet);
