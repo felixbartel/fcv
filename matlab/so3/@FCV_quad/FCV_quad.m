@@ -28,8 +28,8 @@ properties(Dependent = true)
 end
 
 methods
-  function self = FCV_quad(nodes,f,W,N,s)
-    self.nodes = nodes;
+  function self = FCV_quad(angles,f,W,N,s)
+    self.nodes = angles;
     self.f = f;
     self.W = W;
     if length(N) == 1 % only bandwidth and decay are given
@@ -42,7 +42,7 @@ methods
     % parameters for compatibility to mtex
     self.plan = nfsoft(self.N,self.M,bitor(2^4,4),0,4,1000,2*ceil(1.5*self.N));
     
-    self.plan.x = [self.nodes(:,1)';self.nodes(:,2)';self.nodes(:,3)'];
+    self.plan.x = angles.';
   end
 
   function M = get.M(self)

@@ -1,10 +1,10 @@
-classdef FCV_quad < FCV
-% FCV_QUAD is a class for fast cross-validation for given quadrature rule
+classdef FCV_appr < FCV
+% FCV_APPR is a class for fast cross-validation without given quadrature rule
 % on the rotation group
 %
 % Syntax:
-%   fcv = FCV_QUAD(nodes,f,W,N,s)
-%   fcv = FCV_QUAD(nodes,f,W,What)
+%   fcv = FCV_APPR(nodes,f,W,N,s)
+%   fcv = FCV_APPR(nodes,f,W,What)
 %
 % Input:
 %   nodes - nodes in space domain
@@ -28,10 +28,14 @@ properties(Dependent = true)
 end
 
 methods
-  function self = FCV_quad(nodes,f,W,N,s)
-    self.nodes = nodes;
+  function self = FCV_appr(angles,f,W,N,s)
+    self.nodes = angles;
     self.f = f;
-    self.W = W;
+    if length(W) == 1
+      self.W = W*ones(size(f));
+    else
+      self.W = W;
+    end
     if length(N) == 1 % only bandwidth and decay are given
       self.What = ((0:N)+0.5).^(2*s);
       self.What = repelem(self.What,(1:2:(2*N+1)).^2)';
@@ -39,12 +43,10 @@ methods
       self.What = N;
     end
     
-    %self.plan = nfsoft(self.N,self.M);
+    % parameters for compatibility to mtex
+    self.plan = nfsoft(self.N,self.M,bitor(2^4,4),0,4,1000,2*ceil(1.5*self.N));
     
-    nfsoft_flags = bitor(2^4,4);
-    self.plan = nfsoftmex('init',self.N,length(ori),nfsoft_flags,0,4,1000,2*ceil(1.5*L));
-    
-    self.plan.x = [self.nodes(:,1)';self.nodes(:,2)';self.nodes(:,3)'];
+    self.plan.x = angles.';
   end
 
   function M = get.M(self)

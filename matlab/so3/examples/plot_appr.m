@@ -5,55 +5,60 @@
 %% initialization
 
 rng('default');                           % reset random generatormber of nodes
-N         = 23;                           % bandwidth
-N = floor(N/2);
+
 mtexdata 'ol';
 odf = calcODF(ebsd('ol').orientations);
+N         = odf.bandwidth-1;              % bandwidth
 fhat = odf.calcFourier;                   % oroginal fhat
 fhat = [fhat;zeros((N+1)*(4*(N+1)*(N+1)-1)/3-length(fhat),1)];
 fhat = fhat(1:(N+1)*(4*(N+1)*(N+1)-1)/3);
 odf = FourierODF(fhat,odf.CS,odf.SS);
 
-A = load('examples/N23_M5880_IcoC7.dat');
-nodes = orientation.byMatrix(reshape(A',3,3,[]));
-nodes = nodes(:);
+M         = 2*(N+1)*(4*(N+1)^2-1)/3;      % number of nodes
+nodes = orientation.rand(M);
 angles = Euler(nodes,'nfft');
+W = VoronoiArea(nodes);
 
-M         = length(nodes);                % number of nodes
-W = 8*pi^2/M;
-f         = odf.eval(nodes);        % function values
+f         = odf.eval(nodes);              % function values
 
-f_e       = f+0.1*randn(size(f))*(max(f)-min(f)); % noisy function values
+f_e       = f+0.05*randn(size(f))*(max(f)-min(f)); % noisy function values
 s         = 3;                            % weights in requency domain
 
-lambda    = 2.^(linspace(-18,-15,25));    % possible lambda
+lambda    = 2.^(linspace(-22,-20,25));     % possible lambda
 err       = 0*lambda;                     % stores L_2-error
-cv        = 0*lambda;                     % stores cv score
+ocv       = 0*lambda;                     % stores ocv score
+gcv       = 0*lambda;                     % stores gcv score
+ocv_exact = 0*lambda;                     % stores exact ocv score
+gcv_exact = 0*lambda;                     % stores exact gcv score
 
 
 %% main computations
 
-fcv = FCV_quad(angles,f_e,W,N,s);
+fcv = FCV_appr(angles,f_e,W,N,s);
 
 n = (0:N)';
 n = repelem(n,(1:2:(2*N+1)).^2);
-
+tic
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [cv(idx),~,fhat_r] = fcv.compute(lambda(idx));
+  [ocv(idx),gcv(idx),fhat_r] = fcv.compute(lambda(idx));
+%  [ocv_exact(idx),gcv_exact(idx)] = fcv.compute_exact(lambda(idx));
   err(idx) = norm((fhat-fhat_r).*(2*n+1)/(8*pi^2));
 end
 close(wb);
-
+toc
 
 %% computations for plotting
 
 % get optimal lambda
 [~,idx_err] = min(err);
-[~,idx_cv]  = min(cv);
+[~,idx_gcv_exact] = min(gcv_exact);
+[~,idx_ocv_exact] = min(ocv_exact);
+[~,idx_gcv] = min(gcv);
+[~,idx_ocv] = min(ocv);
 
-[~,~,fhat_r] = fcv.compute(lambda(idx_cv));
+[~,~,fhat_r] = fcv.compute(lambda(idx_ocv));
 odf_r = FourierODF(fhat_r,odf.CS,odf.SS);
 
 nodes.CS = odf.CS;
@@ -71,8 +76,11 @@ xlabel('\lambda');
 ylabel('L_2-error');
 % plot cv score
 yyaxis right;
-p = loglog(lambda,cv); hold on;
-scatter(lambda(idx_cv),cv(idx_cv),40,'filled'); hold off;
+p = loglog(lambda,[ocv_exact; gcv_exact; ocv; gcv]); hold on;
+scatter(lambda([idx_ocv_exact idx_gcv_exact idx_ocv idx_gcv]),...
+  [ocv_exact(idx_ocv_exact) gcv_exact(idx_gcv_exact) ocv(idx_ocv) gcv(idx_gcv)],40,'filled');
+ylim([min([ocv_exact gcv_exact gcv]) max([ocv_exact gcv_exact gcv])]); hold off;
+legend(p,'ocv','gcv','appr ocv','appr gcv');
 ylabel('cv score');
 axis square;
 

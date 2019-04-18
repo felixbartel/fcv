@@ -5,7 +5,7 @@ function W = VoronoiArea(nodes)
 %   W = VORONOIAREA(nodes)
 %
 % Input
-%   nodes - M x d vecor (only d=1,2 supported so far)
+%   nodes - M x d vecor (only d=1,2,3 supported so far)
 %
 % Output
 %   W - Voronoi weights
