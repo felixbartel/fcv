@@ -4,8 +4,8 @@
 ## Overview
 
 The `fct` package is a fast implementation for evaluating the ordinary cross-validation score and the generalized cross-validation score.
- * The `matlab/*/examples/plot_*` scripts create the figures from the paper below
- * The `matlab/*/examples/ad_*` scripts use the combination of the fast evaluation with the a minimization technique to provide a atomatic denoising scheme
+ * The `examples/plot_*` scripts create the figures from the paper below
+ * The `examples/ad_*` scripts use the combination of the fast evaluation with the a minimization technique to provide a atomatic denoising scheme
 
 
 ## Requirements
@@ -25,13 +25,9 @@ If you use `fcv` in your work, please cite the following.
 
 ```tex
 @article{,
-author  = {},
-title   = {},
-journal = {},
-year    = {},
-volume  = {},
-number  = {},
-pages   = {},
-doi     = {}
+author = {Felix Bartel and Ralf Hielscher and Daniel Potts},
+title = {Fast Cross-validation in Harmonic Approximation},
+year = {2019},
+eprint = {arXiv:1903.10206},
 }
 ```
