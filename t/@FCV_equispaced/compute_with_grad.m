@@ -19,13 +19,13 @@ function [cv,grad,fhat_r,f_r] = compute_with_grad(self,lambda)
   f_r = fftd(fhat_r,self.d);
 
   h = self.W*sum(1./(1+lambda*self.What));
-  cv = sum(((f_r-self.f)./(1-h)).^2);
+  cv = 1/self.M*sum(((f_r-self.f)./(1-h)).^2);
   cv = real(cv);
   
   ddh = self.W*sum(self.What./(1+lambda*self.What).^2);
   ddf = fftd(fhat_r.*self.What./(1+lambda*self.What).^2,self.d);
   
-  grad = -2*sum(...
+  grad = -2/self.M*sum(...
     ddh.*(f_r-self.f).^2./(1-h).^3+...
     ddf.*(f_r-self.f)./(1-h).^2);
   grad = real(grad);

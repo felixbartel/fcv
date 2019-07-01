@@ -36,8 +36,8 @@ function [ocv,gcv,fhat_r,f_r] = compute_exact(self,lambda)
     
     h(l) = tmp(l);
   end
-  ocv = real(sum(((f_r-self.f)./(1-h)).^2));  
-  gcv = real(sum(((f_r-self.f)./(1-mean(h))).^2));
+  ocv = 1/self.M*real(sum(((f_r-self.f)./(1-h)).^2));  
+  gcv = 1/self.M*real(sum(((f_r-self.f)./(1-mean(h))).^2));
 end
 
 

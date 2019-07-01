@@ -18,5 +18,5 @@ function [cv,fhat_r,f_r] = compute(self,lambda)
   
   f_r = lfft(self.z,self.M,self.I,fhat_r.');
   h = sum(1./(1+lambda*self.What))*self.W;
-  cv = real(sum(((f_r-self.f)./(1-h)).^2));  
+  cv = 1/self.M*real(sum(((f_r-self.f)./(1-h)).^2));  
 end

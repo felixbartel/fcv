@@ -18,6 +18,6 @@ function [cv,fhat_r,f_r] = compute(self,lambda)
   f_r = fftd(fhat_r,self.d);
 
   h = self.W*sum(1./(1+lambda*self.What));
-  cv = sum(((f_r-self.f)./(1-h)).^2);
+  cv = 1/self.M*sum(((f_r-self.f)./(1-h)).^2);
   cv = real(cv);
 end

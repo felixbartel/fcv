@@ -23,8 +23,8 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
   f_r = nfft_get_f(self.plan);
   
   h = sum(1./(1+lambda*self.What))*self.W;
-  ocv = real(sum(((f_r-self.f)./(1-h)).^2));
-  gcv = real(sum(((f_r-self.f)./(1-mean(h))).^2));
+  ocv = 1/self.M*real(sum(((f_r-self.f)./(1-h)).^2));
+  gcv = 1/self.M*real(sum(((f_r-self.f)./(1-mean(h))).^2));
 end
 
 

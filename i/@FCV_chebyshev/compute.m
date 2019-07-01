@@ -37,6 +37,6 @@ function [ocv,gcv,fhat_r,f_r] = compute(self,lambda)
   
   h = self.W/2*h;
   
-  ocv = norm((f_r-self.f)./(1-h))^2;
-  gcv = norm((f_r-self.f)./(1-mean(h)))^2;
+  ocv = 1/self.M*norm((f_r-self.f)./(1-h))^2;
+  gcv = 1/self.M*norm((f_r-self.f)./(1-mean(h)))^2;
 end

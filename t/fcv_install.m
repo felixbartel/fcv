@@ -1,4 +1,5 @@
 addpath '~/repo/nfft/matlab/nfft'
-addpath '../'
-addpath 'examples'
-addpath 'tools'
+folder = fileparts(which(mfilename('fullpath')));
+addpath(folder(1:end-2))
+addpath(fullfile(folder,'examples'))
+addpath(fullfile(folder,'tools'))
