@@ -27,10 +27,10 @@ drawnow();
 
 fcv = FCV_chebyshev(f_e,s);
 lambda_min = fcv.minimize();
-[~,~,~,f_r] = fcv.compute(lambda_min);
+res = fcv.compute(lambda_min);
 
 
 %% plot reconstruction
 
-plot(nodes,real(f_r)); hold off;
+plot(nodes,real(res.f_r)); hold off;
 title('noisy data and recontruction')

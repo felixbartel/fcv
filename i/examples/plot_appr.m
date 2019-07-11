@@ -35,7 +35,8 @@ nodes2 = cos(pi*(2*(1:M2)-1)/(2*M2)).';
 f2 = fun(nodes2);
 f2 = f2-min(f2); f2 = f2/max(f2);
 fcv = FCV_chebyshev(f2,0);
-[~,~,fhat] = fcv.compute(0);
+res = fcv.compute(0);
+fhat = res.fhat_r;
 fhat = fhat(1:M);
 
 
@@ -46,8 +47,10 @@ fcv = FCV_appr(nodes,f_e,[],M,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [ocv(idx),gcv(idx),fhat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm([pi;pi/2*ones(M-1,1)].*(fhat-fhat_r));
+  res = fcv.compute(lambda(idx));
+  ocv(idx) = res.ocv;
+  gcv(idx) = res.gcv;
+  err(idx) = norm([pi;pi/2*ones(M-1,1)].*(fhat-res.fhat_r));
 %  [ocv_exact(idx),gcv_exact(idx),~,f_r] = fcv.compute_exact(lambda(idx));
 end
 close(wb);
@@ -60,16 +63,16 @@ close(wb);
 [~,idx_gcv] = min(gcv);
 [~,idx_ocv] = min(ocv);
 
-[~,~,fhat_r] = fcv.compute(lambda(idx_ocv));
+res = fcv.compute(lambda(idx_ocv));
 
 % calculate values for plotting
-res = 480;
-plotnodes = linspace(-1,1,res);
+resolution = 480;
+plotnodes = linspace(-1,1,resolution);
 
 plan = nfct_init_1d(M,length(plotnodes));
 nfct_set_x(plan,acos(plotnodes)/(2*pi));
 
-plotf_r = sqrt(M/2)*ndctIII(plan,fhat_r);
+plotf_r = sqrt(M/2)*ndctIII(plan,res.fhat_r);
 nfct_finalize(plan);
 
 

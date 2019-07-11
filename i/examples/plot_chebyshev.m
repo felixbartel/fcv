@@ -27,7 +27,8 @@ nodes2 = cos(pi*(2*(1:M2)-1)/(2*M2)).';
 f2 = fun(nodes2);
 f2 = f2-min(f2); f2 = f2/max(f2);
 fcv = FCV_chebyshev(f2,0);
-[~,~,fhat] = fcv.compute(0);
+res = fcv.compute(0);
+fhat = res.fhat_r;
 fhat = fhat(1:M);
 
 
@@ -36,8 +37,10 @@ fhat = fhat(1:M);
 fcv = FCV_chebyshev(f_e,s);
 
 for idx = 1:length(lambda) % loop over lambda
-  [ocv(idx),gcv(idx),fhat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm([pi;pi/2*ones(M-1,1)].*(fhat-fhat_r));
+  res = fcv.compute(lambda(idx));
+  ocv(idx) = res.ocv;
+  gcv(idx) = res.gcv;
+  err(idx) = norm([pi;pi/2*ones(M-1,1)].*(fhat-res.fhat_r));
 end
 
 
@@ -45,7 +48,7 @@ end
 
 [~,idx_gcv] = min(gcv);
 [~,idx_ocv] = min(ocv);
-[~,~,~,f_r] = fcv.compute(lambda(idx_ocv));
+res = fcv.compute(lambda(idx_ocv));
 
 
 %% plotting
@@ -54,7 +57,7 @@ subplot(121);
 % plot noisy data
 scatter(nodes,real(f_e),10,'k','filled'); hold on;
 % plot reconstruction
-plot(nodes,real(f_r)); hold off;
+plot(nodes,real(res.f_r)); hold off;
 axis square;
 title('noisy data and recontruction')
 

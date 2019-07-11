@@ -34,15 +34,15 @@ drawnow();
 
 fcv = FCV_appr(nodes,f_e,[],M,s);
 lambda_min = fcv.minimize();
-[~,~,fhat_r] = fcv.compute(lambda_min);
+res = fcv.compute(lambda_min);
 
-res = 480;
-plotnodes = linspace(-1,1,res);
+resolution = 480;
+plotnodes = linspace(-1,1,resolution);
 
 plan = nfct_init_1d(M,length(plotnodes));
 nfct_set_x(plan,acos(plotnodes)/(2*pi));
 
-plotf_r = sqrt(M/2)*ndctIII(plan,fhat_r);
+plotf_r = sqrt(M/2)*ndctIII(plan,res.fhat_r);
 nfct_finalize(plan);
 
 
