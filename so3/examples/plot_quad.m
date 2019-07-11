@@ -41,8 +41,9 @@ n = repelem(n,(1:2:(2*N+1)).^2);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [cv(idx),~,fhat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm((fhat-fhat_r).*(2*n+1)/(8*pi^2));
+  res = fcv.compute(lambda(idx));
+  cv(idx) = res.ocv;
+  err(idx) = norm((fhat-res.fhat_r).*(2*n+1)/(8*pi^2));
 end
 close(wb);
 
@@ -53,8 +54,8 @@ close(wb);
 [~,idx_err] = min(err);
 [~,idx_cv]  = min(cv);
 
-[~,~,fhat_r] = fcv.compute(lambda(idx_cv));
-odf_r = FourierODF(fhat_r,odf.CS,odf.SS);
+res = fcv.compute(lambda(idx_cv));
+odf_r = FourierODF(res.fhat_r,odf.CS,odf.SS);
 
 nodes.CS = odf.CS;
 nodes.SS = odf.SS;
