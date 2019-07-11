@@ -44,9 +44,13 @@ fcv = FCV_appr(nodes,f_e,[],N,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [ocv(idx),gcv(idx),f_hat_r] = fcv.compute(lambda(idx));
-%  [ocv_exact(idx),gcv_exact(idx)] = fcv.compute_exact(lambda(idx));
-  err(idx) = norm(fhat-f_hat_r);
+  s = fcv.compute(lambda(idx));
+  ocv(idx) = s.ocv;
+  gcv(idx) = s.gcv;
+%   s = fcv.compute(lambda(idx),"exact");
+%   ocv_exact(idx) = s.ocv;
+%   gcv_exact(idx) = s.gcv;
+  err(idx) = norm(fhat-s.fhat_r);
 end
 close(wb);
 
@@ -59,7 +63,7 @@ close(wb);
 [~,idx_gcv_appr]  = min(gcv);
 [~,idx_ocv_appr]  = min(ocv);
 
-[~,~,f_hat_r] = fcv.compute(lambda(idx_ocv_appr));
+s = fcv.compute(lambda(idx_ocv_appr));
 
 res = 480;
 t = linspace(0,1,res);
@@ -67,7 +71,7 @@ t = linspace(0,1,res);
 plan = nfft_init_2d(N,N,res^2);
 nfft_set_x(plan,[plotnodes_x(:).';plotnodes_y(:).']);
 nfft_precompute_psi(plan);
-nfft_set_f_hat(plan,f_hat_r);
+nfft_set_f_hat(plan,s.fhat_r);
 nfft_trafo(plan);
 plotf_r = nfft_get_f(plan);
 nfft_finalize(plan);
@@ -105,7 +109,7 @@ yyaxis right;
 p = loglog(lambda,[ocv_exact; gcv_exact; ocv; gcv]); hold on;
 scatter(lambda([idx_ocv idx_gcv idx_ocv_appr idx_gcv_appr]),...
   [ocv_exact(idx_ocv) gcv_exact(idx_gcv) ocv(idx_ocv_appr) gcv(idx_gcv_appr)],40,'filled');
-ylim([min([ocv_exact gcv_exact gcv]) max([ocv_exact gcv_exact gcv])]); hold off;
+ylim([min(real([ocv_exact gcv_exact gcv])) max(real([ocv_exact gcv_exact gcv]))]); hold off;
 legend(p,'ocv','gcv','appr ocv','appr gcv');
 ylabel('cv score');
 axis square;

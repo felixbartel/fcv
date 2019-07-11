@@ -26,8 +26,9 @@ cv     = 0*lambda;                   % stores cv score
 fcv = FCV_equispaced(1,f_e,s);
 
 for idx = 1:length(lambda) % loop over lambda
-  [cv(idx),f_hat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm(fhat-f_hat_r);
+  s = fcv.compute(lambda(idx));
+  cv(idx) = s.ocv;
+  err(idx) = norm(fhat-s.fhat_r);
 end
 
 
@@ -37,8 +38,8 @@ end
 [~,idx_cv]  = min(cv);
 
 % calculate reconstruction
-[~,~,f_r] = fcv.compute(lambda(idx_cv));
-
+s = fcv.compute(lambda(idx_cv));
+f_r = s.f_r;
 
 %% plotting
 

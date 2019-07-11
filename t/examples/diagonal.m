@@ -19,7 +19,9 @@ colormap autumn;
 
 for lambda = 2.^(linspace(-70,10,100))
   
-  [~,~,fhat_r,hexact] = fcv.compute(lambda);
+  s = fcv.compute(lambda);
+  fhat_r = s.fhat_r;
+  hexact = s.f_r;
   hexact = hexact(M/2+1);
   
   f_r = fftd(...
@@ -28,7 +30,6 @@ for lambda = 2.^(linspace(-70,10,100))
     fhat_r(1:end/2)],1);
   
   h = fcv.W(M/2+1)*sum(1./(1+lambda*What));
- 
   
   plot((0:M_plot-1)/M_plot,real(f_r),'color',0.5*ones(1,3));
   scatter(nodes(M/2+1),h,50,norm(h-hexact));

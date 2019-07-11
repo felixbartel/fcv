@@ -33,12 +33,15 @@ end
 
 function [val,grad] = objfcn(t,fcv)
   if nargout == 1
-    val = fcv.compute(exp(t));
+    s = fcv.compute(exp(t));
+    val = s.gcv;
   else
-    [val,grad] = fcv.compute_with_grad(exp(t));
-    grad = grad/val*exp(t);
+    s = fcv.compute_with_grad(exp(t));
+    val = s.gcv;
+    grad = s.gcv_grad;
+    grad = real(grad/val*exp(t));
   end
-  val = log(val);
+  val = real(log(val));
 end
 
 

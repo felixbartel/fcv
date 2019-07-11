@@ -35,7 +35,7 @@ fcv = FCV_appr(nodes,f_e,[],N,s);
 lambda_min = fcv.minimize();
 
 % calculate reconstruction
-[~,~,fhat_r] = fcv.compute(lambda_min);
+s = fcv.compute(lambda_min);
 
 res = 480;
 t = linspace(0,1,res);
@@ -43,7 +43,7 @@ t = linspace(0,1,res);
 plan = nfft_init_2d(N,N,res^2);
 nfft_set_x(plan,[plotnodes_x(:).';plotnodes_y(:).']);
 nfft_precompute_psi(plan);
-nfft_set_f_hat(plan,fhat_r);
+nfft_set_f_hat(plan,s.fhat_r);
 nfft_trafo(plan);
 plotf_r = nfft_get_f(plan);
 nfft_finalize(plan);

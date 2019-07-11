@@ -35,13 +35,13 @@ fcv = FCV_equispaced(2,f_e,s);
 lambda_min = fcv.minimize();
 
 % calculate reconstruction
-[~,~,f_r] = fcv.compute(lambda_min);
+s = fcv.compute(lambda_min);
 
 
 %% plot reconstruction
 
 subplot(122);
-imagesc(real(reshape(f_r,N,N)));
+imagesc(real(reshape(s.f_r,N,N)));
 title('reconstruction');
 axis square;
 caxis([0 1]);

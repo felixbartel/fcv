@@ -30,10 +30,10 @@ fcv = FCV_equispaced(1,f_e,s);
 lambda_min = fcv.minimize();
 
 % calculate reconstruction
-[~,~,f_r] = fcv.compute(lambda_min);
+s = fcv.compute(lambda_min);
 
 
 %% plot reconstruction
 
-plot(nodes,real(f_r)); hold off;
+plot(nodes,real(s.f_r)); hold off;
 title('noisy data and reconstruction');

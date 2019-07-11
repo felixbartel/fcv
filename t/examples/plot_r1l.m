@@ -34,8 +34,9 @@ fcv = FCV_r1l(z,M,f_e,I,W_hat);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [cv(idx),f_hat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm(f_hat-f_hat_r);
+  s = fcv.compute(lambda(idx));
+  cv(idx) = s.ocv;
+  err(idx) = norm(f_hat-s.fhat_r);
 end
 close(wb)
 
@@ -43,8 +44,6 @@ close(wb)
 
 [~,idx_err] = min(err);
 [~,idx_cv]  = min(cv);
-[~,~,f_r] = fcv.compute(lambda(idx_cv));
-
 
 %% plotting
 
