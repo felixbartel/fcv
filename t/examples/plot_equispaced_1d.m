@@ -26,9 +26,9 @@ cv     = 0*lambda;                   % stores cv score
 fcv = FCV_equispaced(1,f_e,s);
 
 for idx = 1:length(lambda) % loop over lambda
-  s = fcv.compute(lambda(idx));
-  cv(idx) = s.ocv;
-  err(idx) = norm(fhat-s.fhat_r);
+  res = fcv.compute(lambda(idx));
+  cv(idx) = res.ocv;
+  err(idx) = norm(fhat-res.fhat_r);
 end
 
 
@@ -38,8 +38,7 @@ end
 [~,idx_cv]  = min(cv);
 
 % calculate reconstruction
-s = fcv.compute(lambda(idx_cv));
-f_r = s.f_r;
+res = fcv.compute(lambda(idx_cv));
 
 %% plotting
 
@@ -47,7 +46,7 @@ subplot(121);
 % plot noisy data
 scatter(nodes,real(f_e),5,'k','filled'); hold on;
 % plot reconstruction
-plot(nodes,real(f_r)); hold off;
+plot(nodes,real(res.f_r)); hold off;
 axis square;
 title('noisy data and reconstruction');
 

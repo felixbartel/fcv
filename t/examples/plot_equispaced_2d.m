@@ -28,9 +28,9 @@ fcv = FCV_equispaced(2,f_e,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  s = fcv.compute(lambda(idx));
-  cv(idx) = s.ocv;
-  err(idx) = norm(fhat-s.fhat_r);
+  res = fcv.compute(lambda(idx));
+  cv(idx) = res.ocv;
+  err(idx) = norm(fhat-res.fhat_r);
 end
 close(wb);
 
@@ -40,8 +40,8 @@ close(wb);
 [~,idx_cv]  = min(cv);
 
 % calculate reconstruction
-s = fcv.compute(lambda(idx_cv));
-f_r = s.f_r;
+res = fcv.compute(lambda(idx_cv));
+f_r = res.f_r;
 
 %% plotting
 

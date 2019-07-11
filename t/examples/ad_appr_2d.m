@@ -35,15 +35,15 @@ fcv = FCV_appr(nodes,f_e,[],N,s);
 lambda_min = fcv.minimize();
 
 % calculate reconstruction
-s = fcv.compute(lambda_min);
+res = fcv.compute(lambda_min);
 
-res = 480;
-t = linspace(0,1,res);
+resolution = 480;
+t = linspace(0,1,resolution);
 [plotnodes_x,plotnodes_y] = meshgrid(t,t);
-plan = nfft_init_2d(N,N,res^2);
+plan = nfft_init_2d(N,N,resolution^2);
 nfft_set_x(plan,[plotnodes_x(:).';plotnodes_y(:).']);
 nfft_precompute_psi(plan);
-nfft_set_f_hat(plan,s.fhat_r);
+nfft_set_f_hat(plan,res.fhat_r);
 nfft_trafo(plan);
 plotf_r = nfft_get_f(plan);
 nfft_finalize(plan);
@@ -51,7 +51,7 @@ nfft_finalize(plan);
 
 %% plot reconstruction
 subplot(122);
-imagesc(real(reshape(plotf_r,res,res)));
+imagesc(real(reshape(plotf_r,resolution,resolution)));
 title('reconstruction');
 axis square;
 colorbar;

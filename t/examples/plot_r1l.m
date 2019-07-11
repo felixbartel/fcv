@@ -34,9 +34,9 @@ fcv = FCV_r1l(z,M,f_e,I,W_hat);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  s = fcv.compute(lambda(idx));
-  cv(idx) = s.ocv;
-  err(idx) = norm(f_hat-s.fhat_r);
+  res = fcv.compute(lambda(idx));
+  cv(idx) = res.ocv;
+  err(idx) = norm(f_hat-res.fhat_r);
 end
 close(wb)
 

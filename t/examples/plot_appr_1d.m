@@ -41,13 +41,13 @@ fcv = FCV_appr(nodes,f_e,[],N,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  s = fcv.compute(lambda(idx));
-  ocv(idx) = s.ocv;
-  gcv(idx) = s.gcv;
-%   s = fcv.compute(lambda(idx),"exact");
-%   ocv_exact(idx) = s.ocv;
-%   gcv_exact(idx) = s.gcv;
-  err(idx) = norm(fhat-s.fhat_r);
+  res = fcv.compute(lambda(idx));
+  ocv(idx) = res.ocv;
+  gcv(idx) = res.gcv;
+%   res = fcv.compute(lambda(idx),"exact");
+%   ocv_exact(idx) = res.ocv;
+%   gcv_exact(idx) = res.gcv;
+  err(idx) = norm(fhat-res.fhat_r);
 end
 close(wb);
 
@@ -60,15 +60,15 @@ close(wb);
 [~,idx_gcv_appr]  = min(gcv);
 [~,idx_ocv_appr]  = min(ocv);
 
-s = fcv.compute(lambda(idx_ocv_appr));
+res = fcv.compute(lambda(idx_ocv_appr));
 
-res = 480;
-plotnodes = linspace(0,1,res);
+resolution = 480;
+plotnodes = linspace(0,1,resolution);
 
-plan = nfft_init_1d(N,res);
+plan = nfft_init_1d(N,resolution);
 nfft_set_x(plan,plotnodes);
 nfft_precompute_psi(plan);
-nfft_set_f_hat(plan,s.fhat_r);
+nfft_set_f_hat(plan,res.fhat_r);
 nfft_trafo(plan);
 plotf_r = nfft_get_f(plan);
 nfft_finalize(plan);
