@@ -50,8 +50,10 @@ for idx = 1:length(lambda) % loop over lambda
   res = fcv.compute(lambda(idx));
   ocv(idx) = res.ocv;
   gcv(idx) = res.gcv;
+%  res = fcv.compute(lambda(idx),"exact");
+  ocv_exact(idx) = res.ocv;
+  gcv_exact(idx) = res.gcv;
   err(idx) = norm([pi;pi/2*ones(M-1,1)].*(fhat-res.fhat_r));
-%  [ocv_exact(idx),gcv_exact(idx),~,f_r] = fcv.compute_exact(lambda(idx));
 end
 close(wb);
 
