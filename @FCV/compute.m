@@ -2,17 +2,18 @@ function s = compute(self,lambda,varargin)
 % fcv.COMPUTE computes the approximated cross-validation score
 %
 % Syntax:
-%   ocv = fcv.COMPUTE(lambda)
-%   [ocv,gcv,fhat_r,f_r] = fcv.COMPUTE(lambda)
+%   s = fcv.COMPUTE(lambda)
+%   s = fcv.COMPUTE(lambda,'exact')
+%   s = fcv.COMPUTE(lambda,'derivative')
 %
 % Input:
 %   lambda - regularization parameter 
 %
 % Output:
-%   ocv     - ordinary cross-validation score
-%   gcv     - generalized cross-validation score
-%   fhat_r  - corresponding Fourier coefficients
-%   f_r     - corresponding function values
+%   s.ocv     - ordinary cross-validation score
+%   s.gcv     - generalized cross-validation score
+%   s.fhat_r  - corresponding Fourier coefficients
+%   s.f_r     - corresponding function values
 
   flag_exact = "";
   derivative = false;
