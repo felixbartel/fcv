@@ -6,6 +6,9 @@ function [f_r,fhat_r] = H(self,lambda)
    
   fhat_r(1) = sqrt(2)*fhat_r(1);
   f_r = sqrt(self.N/2)*ndctIII(self.plan,fhat_r);
+ % if nargout > 2
+ %   ddf_r = fftd(fhat_r.*self.What./(1+lambda*self.What).^2,self.d);
+ % end
 end
 
 function y = Afun(plan,x,lambda,W,What,transp_flag)

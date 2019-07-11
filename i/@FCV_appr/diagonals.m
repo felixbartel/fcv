@@ -11,7 +11,6 @@ function h = diagonals(self,lambda,flag)
     end
     self.f = f_copy;
   else
-  % compute diagonal emelents
     b = 1./(pi*[1; 1/2*ones(self.N-1,1)]+lambda*self.What);
     b(1) = 2*b(1);
 
@@ -23,5 +22,8 @@ function h = diagonals(self,lambda,flag)
     h = nfct_get_f(self.plan2);
 
     h = self.W.*(h+sum(b(2:end)))/2;
+   % if nargout > 1
+   %   ddh = self.W*sum(self.What./(1+lambda*self.What).^2);
+   % end
   end
 end
