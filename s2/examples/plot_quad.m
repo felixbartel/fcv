@@ -32,8 +32,9 @@ fcv = FCV_quad([nodes.rho,nodes.theta],f_e,W,N,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [cv(idx),~,fhat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm(fhat-fhat_r);
+  res = fcv.compute(lambda(idx));
+  cv(idx) = res.ocv;
+  err(idx) = norm(fhat-res.fhat_r);
 end
 close(wb);
 
@@ -44,8 +45,8 @@ close(wb);
 [~,idx_err] = min(err);
 [~,idx_cv]  = min(cv);
 
-[~,~,fhat_r] = fcv.compute(lambda(idx_cv));
-sF_r = S2FunHarmonic(fhat_r);
+res = fcv.compute(lambda(idx_cv));
+sF_r = S2FunHarmonic(res.fhat_r);
 
 
 %% plotting

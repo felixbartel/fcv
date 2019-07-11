@@ -41,9 +41,13 @@ fcv = FCV_appr([nodes.rho,nodes.theta],f_e,W,N,s);
 wb = waitbar(0);
 for idx = 1:length(lambda) % loop over lambda
   waitbar(idx/length(lambda),wb);
-  [ocv(idx),gcv(idx),fhat_r] = fcv.compute(lambda(idx));
-  err(idx) = norm(fhat-fhat_r);
-%  [ocv_exact(idx),gcv_exact(idx),~] = fcv.compute_exact(lambda(idx));
+  res = fcv.compute(lambda(idx));
+  ocv(idx) = res.ocv;
+  gcv(idx) = res.gcv;
+%  res = fcv.compute(lambda(idx),'exact');
+%  ocv_exact(idx) = res.ocv;
+%  gcv_exact(idx) = res.gcv;
+  err(idx) = norm(fhat-res.fhat_r);
 end
 close(wb);
 
@@ -55,8 +59,8 @@ close(wb);
 [~,idx_gcv]       = min(gcv);
 [~,idx_ocv]       = min(ocv);
 
-[~,~,fhat_r] = fcv.compute(lambda(idx_ocv));
-sF_r = S2FunHarmonic(fhat_r);
+res = fcv.compute(lambda(idx_ocv));
+sF_r = S2FunHarmonic(res.fhat_r);
 
 
 %% plotting
@@ -73,7 +77,7 @@ yyaxis right;
 p = loglog(lambda,[ocv_exact; gcv_exact; ocv; gcv]); hold on;
 scatter(lambda([idx_ocv_exact idx_gcv_exact idx_ocv idx_gcv]),...
   [ocv_exact(idx_ocv_exact) gcv_exact(idx_gcv_exact) ocv(idx_ocv) gcv(idx_gcv)],40,'filled');
-ylim([min([ocv_exact gcv_exact gcv]) max([ocv_exact gcv_exact gcv])]); hold off;
+ylim([min(real([ocv_exact gcv_exact gcv])) max(real([ocv_exact gcv_exact gcv]))]); hold off;
 legend(p,'ocv','gcv','appr ocv','appr gcv');
 ylabel('cv score');
 axis square;

@@ -27,8 +27,8 @@ drawnow();
 fcv = FCV_quad([nodes.rho,nodes.theta],f_e,W,N,s);
 
 lambda_min = fcv.minimize();
-[~,~,fhat_r] = fcv.compute(lambda_min);
-sF_r = S2FunHarmonic(fhat_r);
+res = fcv.compute(lambda_min);
+sF_r = S2FunHarmonic(res.fhat_r);
 
 
 %% plot reconstruction
