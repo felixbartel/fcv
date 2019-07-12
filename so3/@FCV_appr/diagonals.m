@@ -1,4 +1,4 @@
-function h = diagonals(self,lambda,flag)
+function [h,ddh] = diagonals(self,lambda,flag)
 % fcv.DIAGONALS computes the diagonals of the hat matrix F*inv(F'*W*F+lambda*What)*F'*W
   if nargin < 3; flag = ""; end
   if strcmp(flag,"exact")
@@ -16,5 +16,8 @@ function h = diagonals(self,lambda,flag)
 
     idx = nfsoft_f_hat_size(0:self.N);
     h = sum(tmp(idx)./(8*pi^2./tmp(idx)+lambda*self.What(idx)))*self.W;
+    if nargout > 1
+      ddh = -sum(self.What(idx).*tmp(idx)./(8*pi^2./tmp(idx)+lambda*self.What(idx)).^2)*self.W;
+    end
   end
 end

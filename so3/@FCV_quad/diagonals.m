@@ -5,7 +5,7 @@ function [h,ddh] = diagonals(self,lambda,~)
 
   idx = nfsoft_f_hat_size(0:self.N);
   h = sum(tmp(idx)./(8*pi^2./tmp(idx)+lambda*self.What(idx)))*self.W;
-%  if nargout > 1
-%    ddh = self.W*sum(self.What./(1+lambda*self.What).^2);
-%  end
+  if nargout > 1
+    ddh = -sum(self.What(idx).*tmp(idx)./(8*pi^2./tmp(idx)+lambda*self.What(idx)).^2)*self.W;
+  end
 end

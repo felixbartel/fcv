@@ -11,7 +11,10 @@ function [f_r,fhat_r,ddf_r] = H(self,lambda)
   self.plan.fhat = fhat_r;
   nfsoft_trafo(self.plan);
   f_r = self.plan.f;
-%  if nargout > 2
-%    ddf_r = fftd(fhat_r.*self.What./(1+lambda*self.What).^2,self.d);
-%  end
+  if nargout > 2
+    tmp = -self.What.*fhat_r./(8*pi^2./tmp+lambda*self.What);
+    self.plan.fhat = tmp;
+    nfsoft_trafo(self.plan);
+    ddf_r = self.plan.f;
+  end
 end
