@@ -62,7 +62,7 @@ toc
 [~,idx_gcv] = min(gcv);
 [~,idx_ocv] = min(ocv);
 
-res = fcv.compute(lambda(idx_ocv));
+res = fcv.compute(lambda(idx_gcv));
 odf_r = FourierODF(res.fhat_r,odf.CS,odf.SS);
 
 nodes.CS = odf.CS;

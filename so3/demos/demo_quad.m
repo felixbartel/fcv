@@ -14,7 +14,8 @@ fhat = [fhat;zeros((N+1)*(4*(N+1)*(N+1)-1)/3-length(fhat),1)];
 fhat = fhat(1:(N+1)*(4*(N+1)*(N+1)-1)/3);
 odf = FourierODF(fhat,odf.CS,odf.SS);
 
-A = load('examples/N23_M5880_IcoC7.dat');
+folder = fileparts(which(mfilename('fullpath')));
+A = load(fullfile(folder,'N23_M5880_IcoC7.dat'));
 nodes = orientation.byMatrix(reshape(A',3,3,[]));
 nodes = nodes(:);
 angles = Euler(nodes,'nfft');

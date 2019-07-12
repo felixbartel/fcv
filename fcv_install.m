@@ -23,7 +23,7 @@ elseif strcmp(manifold,'s2')
   addpath(mtex_path);
   startup_mtex
 elseif strcmp(manifold,'so3')
-  addpath(fullfile(nfft_dir,'matlab','nfsoft'));
+  addpath(fullfile(nfft_path,'matlab','nfsoft'));
   addpath(mtex_path);
   startup_mtex
 end

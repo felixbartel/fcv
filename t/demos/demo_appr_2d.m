@@ -63,7 +63,7 @@ close(wb);
 [~,idx_gcv_appr]  = min(gcv);
 [~,idx_ocv_appr]  = min(ocv);
 
-res = fcv.compute(lambda(idx_ocv_appr));
+res = fcv.compute(lambda(idx_gcv_appr));
 
 resolution = 480;
 t = linspace(0,1,resolution);

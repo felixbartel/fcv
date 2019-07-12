@@ -2,8 +2,9 @@ function [f_r,fhat_r,ddf_r] = H(self,lambda)
 % fcv.H computes the matrix-vector product with the hat matrix F*inv(F'*W*F+lambda*What)*F'*W
   [fhat_r,~] = lsqr(...
     @(x,transp_flag) Afun(self.plan,x,lambda,self.W,self.What,transp_flag),...
-    [sqrt(self.W).*self.f;zeros(length(self.What),1)],1e-10);
-    
+    [sqrt(self.W).*self.f;zeros(length(self.What),1)],1e-10,[],[],[],self.x0);
+  self.x0 = fhat_r; % use last result as initial guess
+
   nfft_set_f_hat(self.plan,fhat_r);
   nfft_trafo(self.plan);
   f_r = nfft_get_f(self.plan);

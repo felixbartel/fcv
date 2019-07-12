@@ -20,6 +20,7 @@ properties
   W = [];     % weights in space domain
   What = [];  % weights in frequency domain
   plan = [];  % nfft plan
+  x0 = [];    % initial guess while solving with H
 end
 
 properties(Dependent = true)

@@ -21,6 +21,7 @@ properties
   What = [];  % weights in frequency domain
   plan = [];  % nfct plan 1
   plan2 = []; % nfct plan 2
+  x0 = [];    % initial guess while solving with H
 end
 
 properties(Dependent = true)

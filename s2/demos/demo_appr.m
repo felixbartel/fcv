@@ -59,7 +59,7 @@ close(wb);
 [~,idx_gcv]       = min(gcv);
 [~,idx_ocv]       = min(ocv);
 
-res = fcv.compute(lambda(idx_ocv));
+res = fcv.compute(lambda(idx_gcv));
 sF_r = S2FunHarmonic(res.fhat_r);
 
 
