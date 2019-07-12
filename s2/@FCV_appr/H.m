@@ -18,7 +18,7 @@ function [f_r,fhat_r,ddf_r] = H(self,lambda)
   end
 end
 
-function y = Afun(plan,x,lambda,W,W_hat,transp_flag)
+function y = Afun(plan,x,lambda,W,What,transp_flag)
   if strcmp(transp_flag,'notransp')
     nfsftmex('set_f_hat_linear',plan,x);
     nfsftmex('trafo',plan);
@@ -26,7 +26,7 @@ function y = Afun(plan,x,lambda,W,W_hat,transp_flag)
     
     y = sqrt(W).*y;
     
-    y = [y; sqrt(lambda*W_hat).*x];
+    y = [y; sqrt(lambda*What).*x];
   else
     y = sqrt(W).*x(1:length(W));
     
@@ -34,6 +34,6 @@ function y = Afun(plan,x,lambda,W,W_hat,transp_flag)
     nfsftmex('adjoint',plan);
     y = nfsftmex('get_f_hat_linear',plan);
     
-    y = y+sqrt(lambda*W_hat).*x(length(W)+1:end);
+    y = y+sqrt(lambda*What).*x(length(W)+1:end);
   end
 end
