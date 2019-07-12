@@ -9,7 +9,7 @@ function [f_r,fhat_r,ddf_r] = H(self,lambda)
   nfsftmex('trafo',self.plan);
   f_r = nfsftmex('get_f',self.plan);
   if nargout > 2
-    tmp = -fhat_r.*self.What./(1+lambda*self.What).^2;
+    tmp = -fhat_r.*self.What./(1+lambda*self.What);
     nfsftmex('set_f_hat_linear',self.plan,tmp);
     nfsftmex('trafo',self.plan);
     ddf_r = nfsftmex('get_f',self.plan);

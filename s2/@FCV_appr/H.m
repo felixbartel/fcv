@@ -7,14 +7,14 @@ function [f_r,fhat_r,ddf_r] = H(self,lambda)
   nfsftmex('set_f_hat_linear',self.plan,fhat_r);
   nfsftmex('trafo',self.plan);
   f_r = nfsftmex('get_f',self.plan);
+  
   if nargout > 2
     [tmp,~] = lsqr(...
       @(x,transp_flag) Afun(self.plan,x,lambda,self.W,self.What,transp_flag),...
-      [zeros(length(self.W),1);-self.What.*fhat_r],1e-10);
-
+      [zeros(length(self.W),1);sqrt(self.What/lambda).*fhat_r],1e-10);
     nfsftmex('set_f_hat_linear',self.plan,tmp);
     nfsftmex('trafo',self.plan);
-    ddf_r = nfsftmex('get_f',self.plan);
+    ddf_r = -nfsftmex('get_f',self.plan);
   end
 end
 

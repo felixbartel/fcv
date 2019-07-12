@@ -11,9 +11,10 @@ function [h,ddh] = diagonals(self,lambda,flag)
     end
     self.f = f_copy;
   else
-    h = sum((2*(0:self.N)'+1)./(1+lambda*self.What((1:self.N+1).^2)))/(4*pi)*self.W;
+    idx = (1:self.N+1).^2;
+    h = sum((2*(0:self.N)'+1)./(1+lambda*self.What(idx)))/(4*pi)*self.W;
     if nargout > 1
-      ddh = -sum((2*(0:self.N)'+1)./(1+lambda*self.What((1:self.N+1).^2).^2))/(4*pi)*self.W;
+      ddh = -sum(self.What(idx).*(2*(0:self.N)'+1)./(1+lambda*self.What(idx)).^2)/(4*pi)*self.W;
     end
   end
 end
