@@ -3,9 +3,9 @@
 
 ## Overview
 
-The `fct` package is a fast implementation for evaluating the ordinary cross-validation score and the generalized cross-validation score.
- * The `examples/plot_*` scripts create the figures from the paper below
- * The `examples/ad_*` scripts use the combination of the fast evaluation with the a minimization technique to provide a atomatic denoising scheme
+The `fcv` package is a fast implementation for evaluating the ordinary cross-validation score and the generalized cross-validation score.
+ * The `demos/demo_*` scripts create the figures from the paper below
+ * The `demos/demo_ad_*` scripts use the combination of the fast evaluation with the a minimization technique to provide a atomatic denoising scheme
 
 
 ## Requirements
@@ -17,6 +17,10 @@ The `fct` package is a fast implementation for evaluating the ordinary cross-val
    * for the scripts on the unit interval we need additionally the `--enable-ndct` flag
    * and for the scripts on the two-dimensional sphere we need the `--enable-nfsft` flag and the [`mtex` toolbox](https://github.com/mtex-toolbox) for the quadrature grid, Voronoi weights, and the plotting
 
+## Installation
+
+* after you have all libraries just run `fcv_install('t')`, `fcv_install('i')`, `fcv_install('s2')` or `fcv_install('so3')`
+* if you didn't install the libraries in `~/repo/` you additionally have to specify theirs paths with `fcv_install('s2',nfft_path,mtex_path)`
 
 ## Citing
 
