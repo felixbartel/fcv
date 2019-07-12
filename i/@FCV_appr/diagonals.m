@@ -1,4 +1,4 @@
-function h = diagonals(self,lambda,flag)
+function [h,ddh] = diagonals(self,lambda,flag)
 % fcv.DIAGONALS computes the diagonals of the hat matrix F*inv(F'*W*F+lambda*What)*F'*W
   if nargin < 3; flag = ""; end
   if strcmp(flag,"exact")
@@ -12,18 +12,29 @@ function h = diagonals(self,lambda,flag)
     self.f = f_copy;
   else
     b = 1./(pi*[1; 1/2*ones(self.N-1,1)]+lambda*self.What);
-    b(1) = 2*b(1);
 
-    bhat_r = zeros(2*self.M,1);
-    bhat_r(1:2:2*self.M-1) = b;
+    btilde = zeros(2*self.M+1,1);
+    btilde(1:2:2*self.M-1) = b;
+    btilde(1) = btilde(1)*2*sqrt(2);
 
-    nfct_set_f_hat(self.plan2,double(bhat_r));
-    nfct_trafo(self.plan2);
-    h = nfct_get_f(self.plan2);
+    h = sqrt(self.N/2)*dctI(btilde);
+    h = h(2:2:2*self.M);
+    h(1) = h(1)*sqrt(2);
+    h = h+(sum(b(2:end)));
 
-    h = self.W.*(h+sum(b(2:end)))/2;
-   % if nargout > 1
-   %   ddh = self.W*sum(self.What./(1+lambda*self.What).^2);
-   % end
-  end
+    h = self.W/2.*h;
+
+    if nargout > 1
+      ddb = -self.What./(pi*[1; 1/2*ones(self.N-1,1)]+lambda*self.What).^2;
+      ddbtilde = zeros(2*self.M+1,1);
+      ddbtilde(1:2:2*self.M-1) = ddb;
+      ddbtilde(1) = ddbtilde(1)*2*sqrt(2);
+
+      ddh = sqrt(self.N/2)*dctI(ddbtilde);
+      ddh = ddh(2:2:2*self.M);
+      ddh(1) = ddh(1)*sqrt(2);
+      ddh = ddh+(sum(ddb(2:end)));
+
+      ddh = self.W/2.*ddh;
+    end
 end

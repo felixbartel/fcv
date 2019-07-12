@@ -8,10 +8,22 @@ function [h,ddh] = diagonals(self,lambda,~)
 
   h = sqrt(self.N/2)*dctI(btilde);
   h = h(2:2:2*self.M);
+  h(1) = h(1)*sqrt(2);
   h = h+(sum(b(2:end)));
   
   h = self.W/2*h;
- % if nargout > 1
- %   ddh = self.W*sum(self.What./(1+lambda*self.What).^2);
- % end
+  
+  if nargout > 1
+    ddb = -self.What./(pi*[1; 1/2*ones(self.N-1,1)]+lambda*self.What).^2;
+    ddbtilde = zeros(2*self.M+1,1);
+    ddbtilde(1:2:2*self.M-1) = ddb;
+    ddbtilde(1) = ddbtilde(1)*2*sqrt(2);
+    
+    ddh = sqrt(self.N/2)*dctI(ddbtilde);
+    ddh = ddh(2:2:2*self.M);
+    ddh(1) = ddh(1)*sqrt(2);
+    ddh = ddh+(sum(ddb(2:end)));
+  
+    ddh = self.W/2*ddh;
+  end
 end
