@@ -1,9 +1,9 @@
-M = 16;
+M = 8;
 M_plot = 2^9;
 N = M;
 
 nodes = (0:M-1)'/M;
-nodes = mod(nodes+0.02*randn(size(nodes)),1);
+%nodes = mod(nodes+0.02*randn(size(nodes)),1);
 
 f = double((0:M-1) == M/2)';
 
@@ -13,8 +13,8 @@ What = What(:);
 fcv = FCV_appr(nodes,f,[],What);
 
 clf; hold on;
-scatter(nodes,f,'k');
-scatter(nodes(M/2+1),f(M/2+1),'filled','k');
+scatter(nodes,f,100,'k');
+scatter(nodes(M/2+1),f(M/2+1),100,'filled','k');
 colormap autumn;
 
 for lambda = 2.^(linspace(-70,10,100))
@@ -32,12 +32,12 @@ for lambda = 2.^(linspace(-70,10,100))
   h = fcv.W(M/2+1)*sum(1./(1+lambda*What));
   
   plot((0:M_plot-1)/M_plot,real(f_r),'color',0.5*ones(1,3));
-  scatter(nodes(M/2+1),h,50,norm(h-hexact));
+%  scatter(nodes(M/2+1),h,50,norm(h-hexact));
   
   drawnow();
 end
 
-scatter(nodes,f,'k');
-scatter(nodes(M/2+1),f(M/2+1),'filled','k')
+scatter(nodes,f,100,'k');
+scatter(nodes(M/2+1),f(M/2+1),100,'filled','k')
 
 hold off;
