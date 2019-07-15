@@ -6,7 +6,7 @@
 
 The `fcv` package is a fast implementation for evaluating the ordinary cross-validation score and the generalized cross-validation score in various settings.
  * The `demos/demo_*` scripts create the figures from the paper below
- * The `demos/demo_ad_*` scripts use the combination of the fast evaluation with the a minimization technique to provide a atomatic denoising scheme
+ * The `demos/demo_ad_*` scripts use the combination of the fast evaluation with the a minimization technique to provide a automatic denoising scheme
 
 
 ## Requirements
