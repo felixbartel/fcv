@@ -1,4 +1,4 @@
-![](https://github.com/felixbartel/fcv/raw/master/fcv.svg "fcv logo")
+<img src="./fcv.svg">
 # Fast Cross-validation in Harmonic Approximation
 
 ## About
