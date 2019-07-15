@@ -1,6 +1,5 @@
-![](https://github.com/felixbartel/fcv/raw/master/fcv.png "fcv logo")
 # Fast Cross-validation in Harmonic Approximation
-
+![](https://github.com/felixbartel/fcv/raw/master/fcv.png "fcv logo")
 
 ## Overview
 
@@ -16,7 +15,8 @@ The `fcv` package is a fast implementation for evaluating the ordinary cross-val
    * for Matlab we need the `--with-matlab=PATH_TO_MATLAB` flag
    * for Octave we need the `--with-octave` flag
    * for the scripts on the unit interval we need additionally the `--enable-ndct` flag
-   * and for the scripts on the two-dimensional sphere we need the `--enable-nfsft` flag and the [`mtex` toolbox](https://github.com/mtex-toolbox) for the quadrature grid, Voronoi weights, and the plotting
+   * for the scripts on the two-dimensional sphere we need the `--enable-nfsft` flag and the [`mtex` toolbox](https://github.com/mtex-toolbox) for the quadrature grid, Voronoi weights, and the plotting
+   * for the scripts on the rotation group we need the `--enable-nfsoft` flag and the [`mtex` toolbox](https://github.com/mtex-toolbox) for the demos
 
 ## Installation
 
