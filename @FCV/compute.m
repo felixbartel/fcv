@@ -34,6 +34,6 @@ function s = compute(self,lambda,varargin)
     [s.f_r,s.fhat_r] = self.H(lambda);
     h = self.diagonals(lambda,flag_exact);
   end
-  s.ocv = 1/self.M*sum(((s.f_r-self.f)./(1-h)).^2);
-  s.gcv = 1/self.M*sum(((s.f_r-self.f)./(1-mean(h))).^2);
+  s.ocv = 1/self.M*norm((s.f_r-self.f)./(1-h)).^2;
+  s.gcv = 1/self.M*norm((s.f_r-self.f)./(1-mean(h))).^2;
 end
