@@ -32,19 +32,16 @@ methods
     if length(What) == 1 % only decay is given
       s = What;
       if d == 1
-        self.What = (1+[0:self.N/2-1 self.N/2:-1:1].^s).';
+        self.What = (1+abs(-self.N/2:self.N/2-1).^s).';
       else
         self.What = zeros(self.N*ones(1,d));
-        t = [0:self.N/2-1 self.N/2:-1:1];
-        if d == 1
-          self.What = t.^2;
-        else
-          for j = 1:d
-            t = reshape(t,(self.N-1)*((1:d) == j)+ones(1,d));
-            self.What = self.What+t.^2;
-          end
+        t = abs(-self.N/2:self.N/2-1);
+        %t = [0:self.N/2-1 self.N/2:-1:1];
+        for j = 1:d
+          t = reshape(t,(self.N-1)*((1:d) == j)+ones(1,d));
+          self.What = self.What+t;
         end
-        self.What = 1+self.What.^(s/2);
+        self.What = 1+self.What.^s;
         self.What = self.What(:);
       end
     else % all What are given

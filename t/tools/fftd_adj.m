@@ -1,13 +1,19 @@
-function f = fftd_adj(fhat,d)
+function fhat = fftd_adj(f,d)
 % d-dimensional adjoint fft with linear in- and output
-  N = (length(fhat))^(1/d);
+  N = (length(f))^(1/d);
   if d == 1
-    f = N*ifft(fhat);
+    fhat = N*ifft(f);
+    fhat = fhat([N/2+1:end 1:N/2]);
   else
-    f = reshape(fhat,N*ones(1,d));
+    fhat = reshape(f,N*ones(1,d));
     for j = 1:d
-      f = N*ifft(f,[],j);
+      fhat = N*ifft(fhat,[],j);
     end
-    f = reshape(f,[],1);
+    for j = 1:d
+      fhat = fhat([N/2+1:end 1:N/2],:);
+      fhat = reshape(fhat,N*ones(1,d));
+      fhat = shiftdim(fhat,1);
+    end
+    fhat = reshape(fhat,[],1);
   end
 end

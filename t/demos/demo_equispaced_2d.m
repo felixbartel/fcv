@@ -40,7 +40,7 @@ close(wb);
 [~,idx_cv]  = min(cv);
 
 % calculate reconstruction
-res = fcv.compute(lambda(idx_cv));
+res = fcv.compute(lambda(idx));
 f_r = res.f_r;
 
 %% plotting
