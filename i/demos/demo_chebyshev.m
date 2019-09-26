@@ -22,7 +22,7 @@ gcv    = 0*lambda;                    % stores gcv score
 
 %% compute exact fhat
 
-M2 = 2^10;
+M2 = max(2^10, M);
 nodes2 = cos(pi*(2*(1:M2)-1)/(2*M2)).';
 f2 = fun(nodes2);
 f2 = f2-min(f2); f2 = f2/max(f2);
