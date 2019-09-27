@@ -33,7 +33,7 @@ fe = fe-min(fe); fe = fe/max(fe);
 
 fhat = 1/M2^2*fftd_adj(fe,2);
 fhat = reshape(fhat,M2,M2);
-fhat = fhat([(M2-N/2+1):M2 1:(N/2)],[(M2-N/2+1):M2 1:(N/2)]);
+fhat = fhat((M2/2-N/2+1):(M2/2+N/2),(M2/2-N/2+1):(M2/2+N/2));
 fhat = fhat(:);
 
 
